@@ -2,7 +2,15 @@ import type { Vec } from "../pieces";
 import { PIECES } from "../pieces/all";
 import { type Position, type SquareKey } from "../position";
 
-export type Move = {
+type ValidMoveResult =
+  | "success"
+  | "no-piece-in-from-square"
+  | "invalid-piece"
+  | "invalid-vector"
+  | "piece-in-the-way"
+  | "capturing-self";
+
+type Move = {
   from: SquareKey;
   to: SquareKey;
 };
@@ -29,8 +37,11 @@ const getVector = (from: SquareKey, to: SquareKey): Vec => {
   return { dx: deltaX, dy: deltaY };
 };
 
-const getSquaresBetween = (from: SquareKey, to: SquareKey): SquareKey[] => {
-  const vector = getVector(from, to);
+const getSquaresBetween = (
+  from: SquareKey,
+  to: SquareKey,
+  factoredVector: Vec
+): SquareKey[] => {
   const squares: SquareKey[] = [];
   const [startFile, startRank] = from.split("");
   const [endFile, endRank] = to.split("");
@@ -38,61 +49,67 @@ const getSquaresBetween = (from: SquareKey, to: SquareKey): SquareKey[] => {
   let currentX = FILE_VALUES[startFile! as keyof typeof FILE_VALUES];
   let currentY = parseInt(startRank!);
 
-  while (
-    currentX !== FILE_VALUES[endFile! as keyof typeof FILE_VALUES] &&
-    currentY !== parseInt(endRank!)
-  ) {
-    currentX += vector.dx;
-    currentY += vector.dy;
+  while (true) {
+    currentX += factoredVector.dx;
+    currentY += factoredVector.dy;
     const fileName = Object.keys(FILE_VALUES).find(
       (key) => FILE_VALUES[key as keyof typeof FILE_VALUES] === currentX
     )!;
+
+    if (fileName === endFile && currentY === parseInt(endRank!)) break;
+
     squares.push(`${fileName}${currentY}` as SquareKey);
   }
 
   return squares;
 };
 
-const isValidMove = (position: Position, move: Move): boolean => {
+const isValidMove = (position: Position, move: Move): ValidMoveResult => {
   const fromSquare = position[move.from];
-  if (!fromSquare) return false;
+  if (!fromSquare) return "no-piece-in-from-square";
 
-  const piece = PIECES.find((p) => p.name === fromSquare.piece)!;
-  if (!piece) return false;
+  const piece = PIECES.find((p) => p.name === fromSquare.piece);
+  if (!piece) return "invalid-piece";
+
+  const isCapturingSelf = fromSquare.color === position[move.to]?.color;
+  if (isCapturingSelf) return "capturing-self";
 
   const vector = getVector(move.from, move.to);
+  const xFactor = Math.abs(vector.dx);
+  const yFactor = Math.abs(vector.dy);
+  const factoredVector = {
+    dx: vector.dx / xFactor,
+    dy: vector.dy / yFactor,
+  };
+
   const isVectorValid = piece.movePattern.some((pattern) => {
     if (pattern.kind === "step") {
       return pattern.vec.dx === vector.dx && pattern.vec.dy === vector.dy;
     }
 
-    const xFactor = Math.abs(pattern.vec.dx);
-    const yFactor = Math.abs(pattern.vec.dy);
-
     if (xFactor !== yFactor) return false;
 
-    const factoredVector = {
-      dx: pattern.vec.dx / xFactor,
-      dy: pattern.vec.dy / yFactor,
-    };
-
-    return factoredVector.dx === vector.dx && factoredVector.dy === vector.dy;
+    return (
+      factoredVector.dx === pattern.vec.dx &&
+      factoredVector.dy === pattern.vec.dy
+    );
   });
-  if (!isVectorValid) return false;
+  if (!isVectorValid) return "invalid-vector";
 
-  if (piece.canMoveThroughOtherPieces) return true;
+  if (piece.canMoveThroughOtherPieces) return "success";
 
-  const squaresBetween = getSquaresBetween(move.from, move.to);
+  const squaresBetween = getSquaresBetween(move.from, move.to, factoredVector);
   const hasOtherPiecesBetween = squaresBetween.some(
     (square) => position[square]
   );
-  if (hasOtherPiecesBetween) return false;
+  if (hasOtherPiecesBetween) return "piece-in-the-way";
 
-  return true;
+  return "success";
 };
 
-const makeMove = (position: Position, move: Move) => {
-  if (!isValidMove(position, move)) throw new Error("Invalid move");
+export const makeMove = (position: Position, move: Move) => {
+  const result = isValidMove(position, move);
+  if (result !== "success") throw new Error(result);
 
   const newPosition = {
     ...position,
