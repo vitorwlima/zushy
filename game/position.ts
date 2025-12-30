@@ -72,6 +72,8 @@ export type Position = {
   h8: Square;
 };
 
+export type SquareKey = keyof Position;
+
 export const initialPosition: Position = {
   a1: { color: "white", piece: "rook" },
   a2: { color: "white", piece: "pawn" },

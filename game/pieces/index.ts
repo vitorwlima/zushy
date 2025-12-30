@@ -22,7 +22,7 @@ export type RayPattern = {
 export type Pattern = StepPattern | RayPattern;
 
 export type Piece = {
-  name: string;
+  name: "pawn" | "knight" | "bishop" | "rook" | "queen" | "king";
   notation: string;
   movePattern: Pattern[];
   capturePattern: Pattern[] | "same as move pattern";
