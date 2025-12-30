@@ -1,6 +1,6 @@
 import type { Vec } from "../pieces";
 import { PIECES } from "../pieces/all";
-import { type Position, type SquareKey } from "../position";
+import { initialPosition, type Position, type SquareKey } from "../position";
 
 type ValidMoveResult =
   | "success"
@@ -78,12 +78,21 @@ const isValidMove = (position: Position, move: Move): ValidMoveResult => {
   const xFactor = Math.abs(vector.dx);
   const yFactor = Math.abs(vector.dy);
   const factoredVector = {
-    dx: vector.dx / xFactor,
-    dy: vector.dy / yFactor,
+    dx: vector.dx / xFactor || 0,
+    dy: vector.dy / yFactor || 0,
   };
 
   const isVectorValid = piece.movePattern.some((pattern) => {
     if (pattern.kind === "step") {
+      if (pattern.condition === "first move") {
+        const initialPositionSquare = initialPosition[move.from];
+        const currentPositionSquare = position[move.from];
+        const isFirstMove =
+          initialPositionSquare?.color === currentPositionSquare?.color &&
+          initialPositionSquare?.piece === currentPositionSquare?.piece;
+        if (!isFirstMove) return false;
+      }
+
       return pattern.vec.dx === vector.dx && pattern.vec.dy === vector.dy;
     }
 
