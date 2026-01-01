@@ -96,8 +96,6 @@ const isValidMove = (position: Position, move: Move): ValidMoveResult => {
       return pattern.vec.dx === vector.dx && pattern.vec.dy === vector.dy;
     }
 
-    if (xFactor !== yFactor) return false;
-
     return (
       factoredVector.dx === pattern.vec.dx &&
       factoredVector.dy === pattern.vec.dy
