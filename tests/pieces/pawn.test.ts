@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { initialPosition } from "../../game/position";
+import { emptyPosition, initialPosition } from "../../game/position";
 import { makeMove } from "../../game/state/moves";
 
 describe("pawn", () => {
@@ -38,5 +38,19 @@ describe("pawn", () => {
     expect(() =>
       makeMove(pawnForwardPosition, { from: "a3", to: "a5" })
     ).toThrowError("invalid-vector");
+  });
+
+  it("should capture successfully", () => {
+    const newPosition = makeMove(
+      {
+        ...emptyPosition,
+        c4: { color: "white", piece: "pawn" },
+        d5: { color: "black", piece: "pawn" },
+      },
+      { from: "c4", to: "d5" }
+    );
+
+    expect(newPosition.d5).toEqual({ color: "white", piece: "pawn" });
+    expect(newPosition.c4).toBeNull();
   });
 });

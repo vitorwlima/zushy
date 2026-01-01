@@ -66,13 +66,16 @@ const getSquaresBetween = (
 
 const isValidMove = (position: Position, move: Move): ValidMoveResult => {
   const fromSquare = position[move.from];
+  const toSquare = position[move.to];
   if (!fromSquare) return "no-piece-in-from-square";
 
   const piece = PIECES.find((p) => p.name === fromSquare.piece);
   if (!piece) return "invalid-piece";
 
-  const isCapturingSelf = fromSquare.color === position[move.to]?.color;
+  const isCapturingSelf = fromSquare.color === toSquare?.color;
   if (isCapturingSelf) return "capturing-self";
+
+  const isCapturing = toSquare !== null;
 
   const vector = getVector(move.from, move.to);
   const xFactor = Math.abs(vector.dx);
@@ -82,7 +85,12 @@ const isValidMove = (position: Position, move: Move): ValidMoveResult => {
     dy: vector.dy / yFactor || 0,
   };
 
-  const isVectorValid = piece.movePattern.some((pattern) => {
+  const pattern =
+    isCapturing && piece.capturePattern !== "same as move pattern"
+      ? piece.capturePattern
+      : piece.movePattern;
+
+  const isVectorValid = pattern.some((pattern) => {
     if (pattern.kind === "step") {
       if (pattern.condition === "first move") {
         const initialPositionSquare = initialPosition[move.from];
