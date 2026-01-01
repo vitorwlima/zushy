@@ -16,10 +16,10 @@ This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) 
 
 ### TODO
 
+- [ ] Implement check
 - [ ] Implement en passant
 - [ ] Implement castling
 - [ ] Implement promotion
-- [ ] Implement check
 - [ ] Implement checkmate
 - [ ] Implement stalemate
 - [ ] Implement threefold repetition
