@@ -1,4 +1,4 @@
-import type { Vec } from "../pieces";
+import type { Pattern, Vec } from "../pieces";
 import { PIECES } from "../pieces/all";
 import { initialPosition, type Position, type SquareKey } from "../position";
 
@@ -90,7 +90,21 @@ const isValidMove = (position: Position, move: Move): ValidMoveResult => {
       ? piece.capturePattern
       : piece.movePattern;
 
-  const isVectorValid = pattern.some((pattern) => {
+  const colorAwarePattern = pattern.map((pattern) => {
+    return {
+      ...pattern,
+      vec: {
+        ...pattern.vec,
+        dy:
+          piece.vectorPerspective === "relativeToColor" &&
+          fromSquare.color === "black"
+            ? pattern.vec.dy * -1
+            : pattern.vec.dy,
+      },
+    };
+  }) satisfies Pattern[];
+
+  const isVectorValid = colorAwarePattern.some((pattern) => {
     if (pattern.kind === "step") {
       if (pattern.condition === "first move") {
         const initialPositionSquare = initialPosition[move.from];
