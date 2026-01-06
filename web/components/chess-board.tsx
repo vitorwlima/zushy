@@ -32,7 +32,7 @@ export const ChessBoard = ({
             key={code}
             className={cn(
               "size-20 flex items-center justify-center transition-colors duration-150",
-              color === "white" ? "bg-gray-100" : "bg-cyan-900",
+              color === "white" ? "bg-cyan-100/50" : "bg-cyan-700/80",
               highlightedSquares.includes(code) ? "bg-cyan-500/80" : ""
             )}
             onClick={() => onSquareClick(code)}
@@ -40,7 +40,7 @@ export const ChessBoard = ({
             {!!piece && (
               // california, cardinal, cburnett, fresca, gioco
               <Image
-                src={`/pieces/cardinal/${piece.color.slice(0, 1)}${
+                src={`/pieces/gioco/${piece.color.slice(0, 1)}${
                   pieceAbreviation[piece.piece]
                 }.svg`}
                 alt={code}
