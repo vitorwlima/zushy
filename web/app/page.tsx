@@ -11,13 +11,18 @@ const Home = () => {
 
   const onSquareClick = (code: SquareKey) => {
     if (highlightedSquares.length === 1 && highlightedSquares[0] !== code) {
-      const newPosition = makeMove(position, {
-        from: highlightedSquares[0],
-        to: code,
-      });
+      try {
+        const newPosition = makeMove(position, {
+          from: highlightedSquares[0],
+          to: code,
+        });
 
-      setPosition(newPosition);
-      setHighlightedSquares([]);
+        setPosition(newPosition);
+        setHighlightedSquares([]);
+      } catch {
+        setHighlightedSquares([]);
+      }
+
       return;
     }
 
