@@ -11,7 +11,7 @@ const pieceAbreviation: Record<Piece["name"], string> = {
   rook: "r",
   queen: "q",
   king: "k",
-}
+};
 
 export const ChessBoard = ({
   position,
@@ -38,8 +38,11 @@ export const ChessBoard = ({
             onClick={() => onSquareClick(code)}
           >
             {!!piece && (
+              // california, cardinal, cburnett, fresca, gioco
               <Image
-                src={`/pieces/california/${piece.color.slice(0, 1)}${pieceAbreviation[piece.piece]}.svg`}
+                src={`/pieces/cardinal/${piece.color.slice(0, 1)}${
+                  pieceAbreviation[piece.piece]
+                }.svg`}
                 alt={code}
                 height={72}
                 width={72}
