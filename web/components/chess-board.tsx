@@ -23,7 +23,7 @@ export const ChessBoard = ({
   highlightedSquares: SquareKey[];
 }) => {
   return (
-    <div className="grid grid-cols-8 grid-rows-8 place-items-center border border-cyan-900 select-none">
+    <div className="grid grid-cols-8 grid-rows-8 place-items-center border border-cyan-700/80 select-none">
       {boardDisplay.map(({ code, color }) => {
         const piece = position[code];
 
