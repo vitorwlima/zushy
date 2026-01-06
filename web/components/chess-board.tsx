@@ -44,8 +44,8 @@ export const ChessBoard = ({
                   pieceAbreviation[piece.piece]
                 }.svg`}
                 alt={code}
-                height={72}
-                width={72}
+                height={80}
+                width={80}
                 draggable={false}
               />
             )}
