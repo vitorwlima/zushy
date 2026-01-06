@@ -1,7 +1,17 @@
 import { boardDisplay } from "@/lib/board-display";
 import { cn } from "@/lib/utilts";
+import { Piece } from "game/pieces";
 import { Position, SquareKey } from "game/position";
 import Image from "next/image";
+
+const pieceAbreviation: Record<Piece["name"], string> = {
+  pawn: "p",
+  knight: "n",
+  bishop: "b",
+  rook: "r",
+  queen: "q",
+  king: "k",
+}
 
 export const ChessBoard = ({
   position,
@@ -21,15 +31,15 @@ export const ChessBoard = ({
           <div
             key={code}
             className={cn(
-              "size-20 flex items-center justify-center",
+              "size-20 flex items-center justify-center transition-colors duration-150",
               color === "white" ? "bg-gray-100" : "bg-cyan-900",
-              highlightedSquares.includes(code) ? "bg-cyan-500" : ""
+              highlightedSquares.includes(code) ? "bg-cyan-500/80" : ""
             )}
             onClick={() => onSquareClick(code)}
           >
             {!!piece && (
               <Image
-                src={`/${piece.color}_${piece.piece}.svg`}
+                src={`/pieces/california/${piece.color.slice(0, 1)}${pieceAbreviation[piece.piece]}.svg`}
                 alt={code}
                 height={72}
                 width={72}
