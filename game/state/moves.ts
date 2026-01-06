@@ -138,7 +138,7 @@ const isValidMove = (position: Position, move: Move): ValidMoveResult => {
   return "success";
 };
 
-export const makeMove = (position: Position, move: Move) => {
+export const makeMove = (position: Position, move: Move): Position => {
   const result = isValidMove(position, move);
   if (result !== "success") throw new Error(result);
 
