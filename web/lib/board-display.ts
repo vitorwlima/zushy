@@ -1,4 +1,4 @@
-import { Color, SquareKey } from "game/position";
+import type { Color, SquareKey } from "game/types";
 
 type BoardDisplay = {
   code: SquareKey;

@@ -1,8 +1,8 @@
 import { boardDisplay } from "@/lib/board-display";
 import { cn } from "@/lib/utilts";
 import { Piece } from "game/pieces";
-import { SquareKey } from "game/position";
-import { GameState } from "game/state/moves";
+import { getIsWhiteTurn } from "game/state/get-is-white-turn";
+import type { GameState, SquareKey } from "game/types";
 import Image from "next/image";
 
 const pieceAbreviation: Record<Piece["name"], string> = {
@@ -23,7 +23,7 @@ export const ChessBoard = ({
   onSquareClick: (code: SquareKey) => void;
   highlightedSquares: SquareKey[];
 }) => {
-  const isWhiteTurn = gameState.moveHistory.length % 2 === 0;
+  const isWhiteTurn = getIsWhiteTurn(gameState);
 
   return (
     <div className="grid grid-cols-8 grid-rows-8 place-items-center select-none">

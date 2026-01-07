@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { initialPosition } from "../../game/position";
-import { makeMove } from "../../game/state/moves";
+import { makeMove } from "../../game/state/make-move";
 
 describe("pieces", () => {
   it("should not move inexistent piece", () => {

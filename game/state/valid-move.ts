@@ -1,6 +1,9 @@
 import type { Pattern, Vec } from "../pieces";
 import { PIECES } from "../pieces/all";
-import { initialPosition, type Position, type SquareKey } from "../position";
+import { initialPosition } from "../position";
+import type { Move, SquareKey, GameState, Position } from "../types";
+import { getIsBlackInCheck, getIsWhiteInCheck } from "./check";
+import { getIsWhiteTurn } from "./get-is-white-turn";
 
 type ValidMoveResult =
   | "success"
@@ -8,16 +11,9 @@ type ValidMoveResult =
   | "invalid-piece"
   | "invalid-vector"
   | "piece-in-the-way"
-  | "capturing-self";
-
-type Move = {
-  from: SquareKey;
-  to: SquareKey;
-};
-
-export type RecordedMove = Move & {
-  notation: string;
-};
+  | "capturing-self"
+  | "not-color-turn"
+  | "in-check";
 
 const FILE_VALUES = {
   a: 1,
@@ -68,10 +64,17 @@ const getSquaresBetween = (
   return squares;
 };
 
-const isValidMove = (position: Position, move: Move): ValidMoveResult => {
+export const isValidMove = (
+  { position, moveHistory }: GameState,
+  move: Move
+): ValidMoveResult => {
   const fromSquare = position[move.from];
   const toSquare = position[move.to];
   if (!fromSquare) return "no-piece-in-from-square";
+
+  const isWhiteTurn = getIsWhiteTurn({ position, moveHistory });
+  const isColorTurn = fromSquare?.color === (isWhiteTurn ? "white" : "black");
+  if (!isColorTurn) return "not-color-turn";
 
   const piece = PIECES.find((p) => p.name === fromSquare.piece);
   if (!piece) return "invalid-piece";
@@ -131,6 +134,24 @@ const isValidMove = (position: Position, move: Move): ValidMoveResult => {
   });
   if (!isVectorValid) return "invalid-vector";
 
+  const futurePosition = {
+    ...position,
+    [move.from]: null,
+    [move.to]: { ...position[move.from]! },
+  } satisfies Position;
+
+  const wouldWhiteBeInCheck = getIsWhiteInCheck({
+    position: futurePosition,
+    moveHistory: [...moveHistory, {...move, notation: "tbd"}],
+  });
+  const wouldBlackBeInCheck = getIsBlackInCheck({
+    position: futurePosition,
+    moveHistory: [...moveHistory, {...move, notation: "tbd"}],
+  });
+
+  if (wouldWhiteBeInCheck && isWhiteTurn) return "in-check";
+  if (wouldBlackBeInCheck && !isWhiteTurn) return "in-check";
+
   if (piece.canMoveThroughOtherPieces) return "success";
 
   const squaresBetween = getSquaresBetween(move.from, move.to, factoredVector);
@@ -140,34 +161,4 @@ const isValidMove = (position: Position, move: Move): ValidMoveResult => {
   if (hasOtherPiecesBetween) return "piece-in-the-way";
 
   return "success";
-};
-
-export type GameState = {
-  position: Position;
-  moveHistory: RecordedMove[];
-};
-
-export const makeMove = (
-  { position, moveHistory }: GameState,
-  move: Move
-): GameState => {
-  const result = isValidMove(position, move);
-  if (result !== "success") throw new Error(result);
-
-  const newPosition = {
-    ...position,
-    [move.from]: null,
-    [move.to]: { ...position[move.from]! },
-  } satisfies Position;
-
-  const newMoveHistory = [
-    ...moveHistory,
-    {
-      from: move.from,
-      to: move.to,
-      notation: "tbd - prob just call a getNotationFromGameState",
-    },
-  ] satisfies RecordedMove[];
-
-  return { position: newPosition, moveHistory: newMoveHistory };
 };

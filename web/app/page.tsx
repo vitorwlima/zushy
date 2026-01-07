@@ -1,9 +1,11 @@
 "use client";
 
-import { initialPosition, SquareKey } from "game/position";
-import { GameState, makeMove } from "game/state/moves";
+import { initialPosition } from "game/position";
+import type { GameState, SquareKey } from "game/types";
+import { makeMove } from "game/state/make-move";
 import { ChessBoard } from "../components/chess-board";
 import { useState } from "react";
+import { getIsWhiteTurn } from "game/state/get-is-white-turn";
 
 const Home = () => {
   const [gameState, setGameState] = useState<GameState>({
@@ -23,7 +25,7 @@ const Home = () => {
         setGameState(newGameState);
         setHighlightedSquares([]);
       } catch {
-        const isWhiteTurn = gameState.moveHistory.length % 2 === 0;
+        const isWhiteTurn = getIsWhiteTurn(gameState);
         const piece = gameState.position[code];
         const isCorrectColor =
           piece?.color === (isWhiteTurn ? "white" : "black");

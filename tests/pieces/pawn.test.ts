@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { emptyPosition, initialPosition } from "../../game/position";
-import { makeMove } from "../../game/state/moves";
+import { makeMove } from "../../game/state/make-move";
 
 describe("pawn", () => {
   describe("white", () => {
