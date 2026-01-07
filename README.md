@@ -17,7 +17,7 @@ This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) 
 ### TODO
 
 - [x] Implement turns
-- [ ] Implement check
+- [x] Implement check
 - [ ] Implement en passant
 - [ ] Implement castling
 - [ ] Implement promotion
