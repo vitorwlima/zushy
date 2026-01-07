@@ -20,7 +20,7 @@ const Home = () => {
         setPosition(newPosition);
         setHighlightedSquares([]);
       } catch {
-        setHighlightedSquares([]);
+        setHighlightedSquares([code]);
       }
 
       return;
@@ -31,7 +31,9 @@ const Home = () => {
       return;
     }
 
-    setHighlightedSquares([code]);
+    if (position[code] !== null) {
+      setHighlightedSquares([code]);
+    }
   };
 
   return (

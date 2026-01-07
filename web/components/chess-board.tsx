@@ -23,7 +23,7 @@ export const ChessBoard = ({
   highlightedSquares: SquareKey[];
 }) => {
   return (
-    <div className="grid grid-cols-8 grid-rows-8 place-items-center border border-cyan-700/80 select-none">
+    <div className="grid grid-cols-8 grid-rows-8 place-items-center select-none">
       {boardDisplay.map(({ code, color }) => {
         const piece = position[code];
 
@@ -33,7 +33,7 @@ export const ChessBoard = ({
             className={cn(
               "size-20 flex items-center justify-center transition-colors duration-150",
               color === "white" ? "bg-cyan-100/50" : "bg-cyan-700/80",
-              highlightedSquares.includes(code) ? "bg-cyan-500/80" : ""
+              highlightedSquares.includes(code) ? "bg-amber-400" : ""
             )}
             onClick={() => onSquareClick(code)}
           >
