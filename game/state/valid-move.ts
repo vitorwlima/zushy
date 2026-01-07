@@ -15,6 +15,10 @@ type ValidMoveResult =
   | "not-color-turn"
   | "in-check";
 
+type ValidMoveOptions = {
+  isCheckVerification?: boolean;
+};
+
 const FILE_VALUES = {
   a: 1,
   b: 2,
@@ -66,15 +70,18 @@ const getSquaresBetween = (
 
 export const isValidMove = (
   { position, moveHistory }: GameState,
-  move: Move
+  move: Move,
+  options: ValidMoveOptions = {}
 ): ValidMoveResult => {
   const fromSquare = position[move.from];
   const toSquare = position[move.to];
   if (!fromSquare) return "no-piece-in-from-square";
 
   const isWhiteTurn = getIsWhiteTurn({ position, moveHistory });
-  const isColorTurn = fromSquare?.color === (isWhiteTurn ? "white" : "black");
-  if (!isColorTurn) return "not-color-turn";
+  if (!options.isCheckVerification) {
+    const isColorTurn = fromSquare?.color === (isWhiteTurn ? "white" : "black");
+    if (!isColorTurn) return "not-color-turn";
+  }
 
   const piece = PIECES.find((p) => p.name === fromSquare.piece);
   if (!piece) return "invalid-piece";
@@ -140,17 +147,19 @@ export const isValidMove = (
     [move.to]: { ...fromSquare },
   } satisfies Position;
 
-  const wouldWhiteBeInCheck = getIsWhiteInCheck({
-    position: futurePosition,
-    moveHistory: [...moveHistory, { ...move, notation: "tbd" }],
-  });
-  const wouldBlackBeInCheck = getIsBlackInCheck({
-    position: futurePosition,
-    moveHistory: [...moveHistory, { ...move, notation: "tbd" }],
-  });
+  if (!options.isCheckVerification) {
+    const wouldWhiteBeInCheck = getIsWhiteInCheck({
+      position: futurePosition,
+      moveHistory: [...moveHistory, { ...move, notation: "tbd" }],
+    });
+    const wouldBlackBeInCheck = getIsBlackInCheck({
+      position: futurePosition,
+      moveHistory: [...moveHistory, { ...move, notation: "tbd" }],
+    });
 
-  if (wouldWhiteBeInCheck && isWhiteTurn) return "in-check";
-  if (wouldBlackBeInCheck && !isWhiteTurn) return "in-check";
+    if (wouldWhiteBeInCheck && isWhiteTurn) return "in-check";
+    if (wouldBlackBeInCheck && !isWhiteTurn) return "in-check";
+  }
 
   const squaresBetween = piece.canMoveThroughOtherPieces
     ? []

@@ -16,10 +16,14 @@ export const getIsWhiteInCheck = (gameState: GameState) => {
 
   return blackPieceSquares.some(
     (square) =>
-      isValidMove(gameState, {
-        from: square,
-        to: whiteKingSquare,
-      }) === "success"
+      isValidMove(
+        gameState,
+        {
+          from: square,
+          to: whiteKingSquare,
+        },
+        { isCheckVerification: true }
+      ) === "success"
   );
 };
 
@@ -37,9 +41,13 @@ export const getIsBlackInCheck = (gameState: GameState) => {
 
   return whitePieceSquares.some(
     (square) =>
-      isValidMove(gameState, {
-        from: square,
-        to: blackKingSquare,
-      }) === "success"
+      isValidMove(
+        gameState,
+        {
+          from: square,
+          to: blackKingSquare,
+        },
+        { isCheckVerification: true }
+      ) === "success"
   );
 };

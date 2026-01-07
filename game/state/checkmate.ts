@@ -32,7 +32,6 @@ export const getIsCheckmate = (gameState: GameState): CheckmateResult => {
 
   if (!isWhiteTurn) {
     const isBlackInCheck = getIsBlackInCheck(gameState);
-    console.log({ isBlackInCheck });
     if (!isBlackInCheck) return null;
 
     const blackKingSquare = Object.keys(gameState.position).find(
