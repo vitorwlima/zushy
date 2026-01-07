@@ -1,15 +1,17 @@
+import { initialPosition } from "../position";
 import type { GameState, SquareKey } from "../types";
 import { isValidMove } from "./valid-move";
 
 export const getIsWhiteInCheck = (gameState: GameState) => {
-  const whiteKingSquare = Object.keys(gameState.position).find(
-    (key) =>
-      gameState.position[key as SquareKey]?.piece === "king" &&
-      gameState.position[key as SquareKey]?.color === "white"
+  const squares = Object.keys(initialPosition) as SquareKey[];
+  const whiteKingSquare = squares.find(
+    (square) =>
+      gameState.position[square]?.piece === "king" &&
+      gameState.position[square]?.color === "white"
   ) as SquareKey;
 
-  const blackPieceSquares = Object.keys(gameState.position).filter(
-    (key) => gameState.position[key as SquareKey]?.color === "black"
+  const blackPieceSquares = squares.filter(
+    (square) => gameState.position[square]?.color === "black"
   ) as SquareKey[];
 
   return blackPieceSquares.some(
@@ -22,14 +24,15 @@ export const getIsWhiteInCheck = (gameState: GameState) => {
 };
 
 export const getIsBlackInCheck = (gameState: GameState) => {
-  const blackKingSquare = Object.keys(gameState.position).find(
-    (key) =>
-      gameState.position[key as SquareKey]?.piece === "king" &&
-      gameState.position[key as SquareKey]?.color === "black"
+  const squares = Object.keys(initialPosition) as SquareKey[];
+  const blackKingSquare = squares.find(
+    (square) =>
+      gameState.position[square]?.piece === "king" &&
+      gameState.position[square]?.color === "black"
   ) as SquareKey;
 
-  const whitePieceSquares = Object.keys(gameState.position).filter(
-    (key) => gameState.position[key as SquareKey]?.color === "white"
+  const whitePieceSquares = squares.filter(
+    (square) => gameState.position[square]?.color === "white"
   ) as SquareKey[];
 
   return whitePieceSquares.some(

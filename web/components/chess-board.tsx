@@ -4,6 +4,7 @@ import { Piece } from "game/pieces";
 import { getIsWhiteTurn } from "game/state/get-is-white-turn";
 import type { GameState, SquareKey } from "game/types";
 import Image from "next/image";
+import { getIsCheckmate } from "game/state/checkmate";
 
 const pieceAbreviation: Record<Piece["name"], string> = {
   pawn: "p",
@@ -24,9 +25,11 @@ export const ChessBoard = ({
   highlightedSquares: SquareKey[];
 }) => {
   const isWhiteTurn = getIsWhiteTurn(gameState);
+  const checkmateResult = getIsCheckmate(gameState);
+  console.log({ checkmateResult });
 
   return (
-    <div className="grid grid-cols-8 grid-rows-8 place-items-center select-none">
+    <div className="grid relative grid-cols-8 grid-rows-8 place-items-center select-none">
       {boardDisplay.map(({ code, color }) => {
         const piece = gameState.position[code];
         const isDisabled =
@@ -64,6 +67,11 @@ export const ChessBoard = ({
           </div>
         );
       })}
+      {checkmateResult !== null && (
+        <p className="text-gray-800 font-semibold absolute -bottom-8 capitalize">
+          {checkmateResult} wins by checkmate.
+        </p>
+      )}
     </div>
   );
 };

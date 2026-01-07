@@ -137,24 +137,24 @@ export const isValidMove = (
   const futurePosition = {
     ...position,
     [move.from]: null,
-    [move.to]: { ...position[move.from]! },
+    [move.to]: { ...fromSquare },
   } satisfies Position;
 
   const wouldWhiteBeInCheck = getIsWhiteInCheck({
     position: futurePosition,
-    moveHistory: [...moveHistory, {...move, notation: "tbd"}],
+    moveHistory: [...moveHistory, { ...move, notation: "tbd" }],
   });
   const wouldBlackBeInCheck = getIsBlackInCheck({
     position: futurePosition,
-    moveHistory: [...moveHistory, {...move, notation: "tbd"}],
+    moveHistory: [...moveHistory, { ...move, notation: "tbd" }],
   });
 
   if (wouldWhiteBeInCheck && isWhiteTurn) return "in-check";
   if (wouldBlackBeInCheck && !isWhiteTurn) return "in-check";
 
-  if (piece.canMoveThroughOtherPieces) return "success";
-
-  const squaresBetween = getSquaresBetween(move.from, move.to, factoredVector);
+  const squaresBetween = piece.canMoveThroughOtherPieces
+    ? []
+    : getSquaresBetween(move.from, move.to, factoredVector);
   const hasOtherPiecesBetween = squaresBetween.some(
     (square) => position[square]
   );

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "bun:test";
 import { emptyPosition, initialPosition } from "../../game/position";
 import { makeMove } from "../../game/state/make-move";
+import { mockMove } from "../mockMove";
 
 describe("pawn", () => {
   describe("white", () => {
@@ -25,7 +26,7 @@ describe("pawn", () => {
     });
 
     it("should move successfully", () => {
-      const pawnForwardPosition = makeMove(
+      const { position: pawnForwardPosition } = makeMove(
         { position: initialPosition, moveHistory: [] },
         {
           from: "a2",
@@ -33,17 +34,20 @@ describe("pawn", () => {
         }
       );
 
-      const { position: newPosition } = makeMove(pawnForwardPosition, {
-        from: "a3",
-        to: "a4",
-      });
+      const { position: newPosition } = makeMove(
+        { position: pawnForwardPosition, moveHistory: [] },
+        {
+          from: "a3",
+          to: "a4",
+        }
+      );
 
       expect(newPosition.a4).toEqual({ color: "white", piece: "pawn" });
       expect(newPosition.a2).toBeNull();
     });
 
     it("should not move successfully (invalid vector)", () => {
-      const pawnForwardPosition = makeMove(
+      const { position: pawnForwardPosition } = makeMove(
         { position: initialPosition, moveHistory: [] },
         {
           from: "a2",
@@ -52,7 +56,10 @@ describe("pawn", () => {
       );
 
       expect(() =>
-        makeMove(pawnForwardPosition, { from: "a3", to: "a5" })
+        makeMove(
+          { position: pawnForwardPosition, moveHistory: [] },
+          { from: "a3", to: "a5" }
+        )
       ).toThrowError("invalid-vector");
     });
 
@@ -62,6 +69,8 @@ describe("pawn", () => {
           position: {
             ...emptyPosition,
             c4: { color: "white", piece: "pawn" },
+            h8: { color: "black", piece: "king" },
+            h6: { color: "white", piece: "king" },
             d5: { color: "black", piece: "pawn" },
           },
           moveHistory: [],
@@ -77,7 +86,7 @@ describe("pawn", () => {
   describe("black", () => {
     it("should move successfully", () => {
       const { position: newPosition } = makeMove(
-        { position: initialPosition, moveHistory: [] },
+        { position: initialPosition, moveHistory: [mockMove] },
         { from: "e7", to: "e6" }
       );
 
@@ -87,7 +96,7 @@ describe("pawn", () => {
 
     it("should move successfully", () => {
       const { position: newPosition } = makeMove(
-        { position: initialPosition, moveHistory: [] },
+        { position: initialPosition, moveHistory: [mockMove] },
         { from: "a7", to: "a5" }
       );
 
@@ -96,18 +105,21 @@ describe("pawn", () => {
     });
 
     it("should move successfully", () => {
-      const pawnForwardPosition = makeMove(
-        { position: initialPosition, moveHistory: [] },
+      const { position: pawnForwardPosition } = makeMove(
+        { position: initialPosition, moveHistory: [mockMove] },
         {
           from: "a7",
           to: "a6",
         }
       );
 
-      const { position: newPosition } = makeMove(pawnForwardPosition, {
-        from: "a6",
-        to: "a5",
-      });
+      const { position: newPosition } = makeMove(
+        { position: pawnForwardPosition, moveHistory: [mockMove] },
+        {
+          from: "a6",
+          to: "a5",
+        }
+      );
 
       expect(newPosition.a5).toEqual({ color: "black", piece: "pawn" });
       expect(newPosition.a6).toBeNull();
@@ -115,8 +127,8 @@ describe("pawn", () => {
     });
 
     it("should not move successfully (invalid vector)", () => {
-      const pawnForwardPosition = makeMove(
-        { position: initialPosition, moveHistory: [] },
+      const { position: pawnForwardPosition } = makeMove(
+        { position: initialPosition, moveHistory: [mockMove] },
         {
           from: "a7",
           to: "a6",
@@ -124,7 +136,10 @@ describe("pawn", () => {
       );
 
       expect(() =>
-        makeMove(pawnForwardPosition, { from: "a6", to: "a4" })
+        makeMove(
+          { position: pawnForwardPosition, moveHistory: [mockMove] },
+          { from: "a6", to: "a4" }
+        )
       ).toThrowError("invalid-vector");
     });
 
@@ -134,9 +149,11 @@ describe("pawn", () => {
           position: {
             ...emptyPosition,
             c4: { color: "white", piece: "pawn" },
+            h8: { color: "black", piece: "king" },
+            h6: { color: "white", piece: "king" },
             d5: { color: "black", piece: "pawn" },
           },
-          moveHistory: [],
+          moveHistory: [mockMove],
         },
         { from: "d5", to: "c4" }
       );

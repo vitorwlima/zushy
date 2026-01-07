@@ -6,7 +6,12 @@ describe("bishop", () => {
   it("should move successfully", () => {
     const { position: newPosition } = makeMove(
       {
-        position: { ...emptyPosition, c1: { color: "white", piece: "bishop" } },
+        position: {
+          ...emptyPosition,
+          c1: { color: "white", piece: "bishop" },
+          h8: { color: "black", piece: "king" },
+          h6: { color: "white", piece: "king" },
+        },
         moveHistory: [],
       },
       { from: "c1", to: "d2" }
@@ -23,6 +28,8 @@ describe("bishop", () => {
           ...emptyPosition,
           c1: { color: "white", piece: "bishop" },
           f4: { color: "black", piece: "queen" },
+          h8: { color: "black", piece: "king" },
+          h6: { color: "white", piece: "king" },
         },
         moveHistory: [],
       },
@@ -58,6 +65,8 @@ describe("bishop", () => {
           position: {
             ...emptyPosition,
             e5: { color: "white", piece: "bishop" },
+            h8: { color: "black", piece: "king" },
+            h6: { color: "white", piece: "king" },
           },
           moveHistory: [],
         },
@@ -73,6 +82,8 @@ describe("bishop", () => {
           position: {
             ...emptyPosition,
             e5: { color: "white", piece: "bishop" },
+            h8: { color: "black", piece: "king" },
+            h6: { color: "white", piece: "king" },
           },
           moveHistory: [],
         },
