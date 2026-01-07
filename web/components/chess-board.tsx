@@ -26,17 +26,17 @@ export const ChessBoard = ({
 }) => {
   const isWhiteTurn = getIsWhiteTurn(gameState);
   const checkmateResult = getIsCheckmate(gameState);
-  console.log({ checkmateResult });
 
   return (
     <div className="grid relative grid-cols-8 grid-rows-8 place-items-center select-none">
       {boardDisplay.map(({ code, color }) => {
         const piece = gameState.position[code];
-        const isDisabled =
+        const isDisabledByTurn =
           highlightedSquares.length === 0 &&
           (piece === null ||
             (piece?.color === "white" && !isWhiteTurn) ||
             (piece?.color === "black" && isWhiteTurn));
+        const isDisabled = isDisabledByTurn || checkmateResult !== null;
 
         return (
           <div

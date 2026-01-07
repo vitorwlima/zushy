@@ -11,6 +11,9 @@ export const getIsCheckmate = (gameState: GameState): CheckmateResult => {
   if (isWhiteTurn) {
     const isWhiteInCheck = getIsWhiteInCheck(gameState);
     if (!isWhiteInCheck) return null;
+  
+    // can capture the piece attacking the king (could be multiple though)
+    // can block the check
 
     const whiteKingSquare = Object.keys(gameState.position).find(
       (key) =>

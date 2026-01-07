@@ -13,7 +13,7 @@ describe("pieces", () => {
     ).toThrowError("no-piece-in-from-square");
   });
 
-  it("should play out this game", () => {
+  it("should play game 1", () => {
     const gameState = {
       position: initialPosition,
       moveHistory: [],
@@ -49,5 +49,25 @@ describe("pieces", () => {
 
     const checkmateResult = getIsCheckmate(move7);
     expect(checkmateResult).toEqual("white");
+  });
+
+  it("should play out game 2", () => {
+    const gameState = {
+      position: initialPosition,
+      moveHistory: [],
+    };
+
+    const move1 = makeMove(gameState, { from: "e2", to: "e4" });
+    const move2 = makeMove(move1, { from: "e7", to: "e6" });
+    const move3 = makeMove(move2, { from: "d2", to: "d4" });
+    const move4 = makeMove(move3, { from: "d7", to: "d5" });
+    const move5 = makeMove(move4, { from: "e4", to: "d5" });
+    const move6 = makeMove(move5, { from: "e6", to: "d5" });
+    const move7 = makeMove(move6, { from: "d1", to: "e2" });
+    const move8 = makeMove(move7, { from: "c8", to: "e6" });
+    const move9 = makeMove(move8, { from: "e2", to: "e6" });
+
+    const checkmateResult = getIsCheckmate(move9);
+    expect(checkmateResult).toBeNull();
   });
 });

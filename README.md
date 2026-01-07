@@ -18,9 +18,12 @@ This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) 
 
 - [x] Implement turns
 - [x] Implement check
+- [x] Implement checkmate
+  - [ ] Can capture the piece attacking the king (could be multiple though)
+  - [ ] Can block the check
+  - [ ] basically fix the mate logic
 - [ ] Implement en passant
 - [ ] Implement castling
 - [ ] Implement promotion
-- [ ] Implement checkmate
 - [ ] Implement stalemate
 - [ ] Implement threefold repetition
