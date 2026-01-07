@@ -4,8 +4,11 @@ import { makeMove } from "../../game/state/moves";
 
 describe("rook", () => {
   it("should move successfully", () => {
-    const newPosition = makeMove(
-      { ...emptyPosition, c1: { color: "white", piece: "rook" } },
+    const { position: newPosition } = makeMove(
+      {
+        position: { ...emptyPosition, c1: { color: "white", piece: "rook" } },
+        moveHistory: [],
+      },
       { from: "c1", to: "c2" }
     );
 
@@ -14,11 +17,14 @@ describe("rook", () => {
   });
 
   it("should capture successfully", () => {
-    const newPosition = makeMove(
+    const { position: newPosition } = makeMove(
       {
-        ...emptyPosition,
-        c1: { color: "white", piece: "rook" },
-        f1: { color: "black", piece: "queen" },
+        position: {
+          ...emptyPosition,
+          c1: { color: "white", piece: "rook" },
+          f1: { color: "black", piece: "queen" },
+        },
+        moveHistory: [],
       },
       { from: "c1", to: "f1" }
     );
@@ -29,20 +35,29 @@ describe("rook", () => {
 
   it("should not move successfully (capturing self)", () => {
     expect(() =>
-      makeMove(initialPosition, { from: "a1", to: "b1" })
+      makeMove(
+        { position: initialPosition, moveHistory: [] },
+        { from: "a1", to: "b1" }
+      )
     ).toThrowError("capturing-self");
   });
 
   it("should not move successfully (piece in the way)", () => {
     expect(() =>
-      makeMove(initialPosition, { from: "a1", to: "a5" })
+      makeMove(
+        { position: initialPosition, moveHistory: [] },
+        { from: "a1", to: "a5" }
+      )
     ).toThrowError("piece-in-the-way");
   });
 
   it("should not move successfully (knight move)", () => {
     expect(() =>
       makeMove(
-        { ...emptyPosition, e5: { color: "white", piece: "rook" } },
+        {
+          position: { ...emptyPosition, e5: { color: "white", piece: "rook" } },
+          moveHistory: [],
+        },
         { from: "e5", to: "d3" }
       )
     ).toThrowError("invalid-vector");
@@ -51,7 +66,10 @@ describe("rook", () => {
   it("should not move successfully (bishop move)", () => {
     expect(() =>
       makeMove(
-        { ...emptyPosition, e5: { color: "white", piece: "rook" } },
+        {
+          position: { ...emptyPosition, e5: { color: "white", piece: "rook" } },
+          moveHistory: [],
+        },
         { from: "e5", to: "f6" }
       )
     ).toThrowError("invalid-vector");

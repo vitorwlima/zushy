@@ -15,6 +15,10 @@ type Move = {
   to: SquareKey;
 };
 
+export type RecordedMove = Move & {
+  notation: string;
+};
+
 const FILE_VALUES = {
   a: 1,
   b: 2,
@@ -138,7 +142,15 @@ const isValidMove = (position: Position, move: Move): ValidMoveResult => {
   return "success";
 };
 
-export const makeMove = (position: Position, move: Move): Position => {
+export type GameState = {
+  position: Position;
+  moveHistory: RecordedMove[];
+};
+
+export const makeMove = (
+  { position, moveHistory }: GameState,
+  move: Move
+): GameState => {
   const result = isValidMove(position, move);
   if (result !== "success") throw new Error(result);
 
@@ -146,7 +158,16 @@ export const makeMove = (position: Position, move: Move): Position => {
     ...position,
     [move.from]: null,
     [move.to]: { ...position[move.from]! },
-  };
+  } satisfies Position;
 
-  return newPosition;
+  const newMoveHistory = [
+    ...moveHistory,
+    {
+      from: move.from,
+      to: move.to,
+      notation: "tbd - prob just call a getNotationFromGameState",
+    },
+  ] satisfies RecordedMove[];
+
+  return { position: newPosition, moveHistory: newMoveHistory };
 };

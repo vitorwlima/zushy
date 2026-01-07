@@ -1,7 +1,8 @@
 import { boardDisplay } from "@/lib/board-display";
 import { cn } from "@/lib/utilts";
 import { Piece } from "game/pieces";
-import { Position, SquareKey } from "game/position";
+import { SquareKey } from "game/position";
+import { GameState } from "game/state/moves";
 import Image from "next/image";
 
 const pieceAbreviation: Record<Piece["name"], string> = {
@@ -14,18 +15,25 @@ const pieceAbreviation: Record<Piece["name"], string> = {
 };
 
 export const ChessBoard = ({
-  position,
+  gameState,
   onSquareClick,
   highlightedSquares,
 }: {
-  position: Position;
+  gameState: GameState;
   onSquareClick: (code: SquareKey) => void;
   highlightedSquares: SquareKey[];
 }) => {
+  const isWhiteTurn = gameState.moveHistory.length % 2 === 0;
+
   return (
     <div className="grid grid-cols-8 grid-rows-8 place-items-center select-none">
       {boardDisplay.map(({ code, color }) => {
-        const piece = position[code];
+        const piece = gameState.position[code];
+        const isDisabled =
+          highlightedSquares.length === 0 &&
+          (piece === null ||
+            (piece?.color === "white" && !isWhiteTurn) ||
+            (piece?.color === "black" && isWhiteTurn));
 
         return (
           <div
@@ -35,7 +43,11 @@ export const ChessBoard = ({
               color === "white" ? "bg-cyan-100/50" : "bg-cyan-700/80",
               highlightedSquares.includes(code) ? "bg-amber-400" : ""
             )}
-            onClick={() => onSquareClick(code)}
+            aria-disabled={isDisabled}
+            onClick={() => {
+              if (isDisabled) return;
+              onSquareClick(code);
+            }}
           >
             {!!piece && (
               // california, cardinal, cburnett, fresca, gioco

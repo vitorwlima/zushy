@@ -1,26 +1,38 @@
 "use client";
 
 import { initialPosition, SquareKey } from "game/position";
-import { makeMove } from "game/state/moves";
+import { GameState, makeMove } from "game/state/moves";
 import { ChessBoard } from "../components/chess-board";
 import { useState } from "react";
 
 const Home = () => {
-  const [position, setPosition] = useState(initialPosition);
+  const [gameState, setGameState] = useState<GameState>({
+    position: initialPosition,
+    moveHistory: [],
+  });
   const [highlightedSquares, setHighlightedSquares] = useState<SquareKey[]>([]);
 
   const onSquareClick = (code: SquareKey) => {
     if (highlightedSquares.length === 1 && highlightedSquares[0] !== code) {
       try {
-        const newPosition = makeMove(position, {
+        const newGameState = makeMove(gameState, {
           from: highlightedSquares[0],
           to: code,
         });
 
-        setPosition(newPosition);
+        setGameState(newGameState);
         setHighlightedSquares([]);
       } catch {
-        setHighlightedSquares([code]);
+        const isWhiteTurn = gameState.moveHistory.length % 2 === 0;
+        const piece = gameState.position[code];
+        const isCorrectColor =
+          piece?.color === (isWhiteTurn ? "white" : "black");
+
+        if (isCorrectColor) {
+          setHighlightedSquares([code]);
+        } else {
+          setHighlightedSquares([]);
+        }
       }
 
       return;
@@ -31,7 +43,7 @@ const Home = () => {
       return;
     }
 
-    if (position[code] !== null) {
+    if (gameState.position[code] !== null) {
       setHighlightedSquares([code]);
     }
   };
@@ -39,7 +51,7 @@ const Home = () => {
   return (
     <div className="flex items-center justify-center h-screen">
       <ChessBoard
-        position={position}
+        gameState={gameState}
         highlightedSquares={highlightedSquares}
         onSquareClick={onSquareClick}
       />
