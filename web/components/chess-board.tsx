@@ -55,7 +55,7 @@ export const ChessBoard = ({
             {!!piece && (
               // california, cardinal, cburnett, fresca, gioco
               <Image
-                src={`/pieces/gioco/${piece.color.slice(0, 1)}${
+                src={`/pieces/cardinal/${piece.color.slice(0, 1)}${
                   pieceAbreviation[piece.piece]
                 }.svg`}
                 alt={code}

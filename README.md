@@ -22,8 +22,12 @@ This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) 
   - [x] Can capture the piece attacking the king (could be multiple though)
   - [x] Can block the check
   - [x] basically fix the mate logic
+- [] Implement castling
+  - [x] White short-side
+  - [ ] White long-side
+  - [ ] Black short-side
+  - [ ] Black long-side
 - [ ] Implement en passant
-- [ ] Implement castling
 - [ ] Implement promotion
 - [ ] Implement stalemate
 - [ ] Implement threefold repetition

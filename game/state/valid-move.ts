@@ -4,6 +4,10 @@ import { initialPosition } from "../position";
 import type { Move, SquareKey, GameState, Position } from "../types";
 import { getIsBlackInCheck, getIsWhiteInCheck } from "./check";
 import { getIsWhiteTurn } from "./get-is-white-turn";
+import {
+  getIsCastlingValid,
+  POSSIBLE_CASTLE_MOVES,
+} from "./special-moves/castle";
 
 type ValidMoveResult =
   | "success"
@@ -13,7 +17,8 @@ type ValidMoveResult =
   | "piece-in-the-way"
   | "capturing-self"
   | "not-color-turn"
-  | "in-check";
+  | "in-check"
+  | "invalid-castling";
 
 type ValidMoveOptions = {
   isCheckVerification?: boolean;
@@ -90,6 +95,9 @@ export const isValidMove = (
   if (isCapturingSelf) return "capturing-self";
 
   const isCapturing = toSquare !== null;
+  const isCastling = POSSIBLE_CASTLE_MOVES.some(
+    (castleMove) => castleMove.from === move.from && castleMove.to === move.to
+  );
 
   const vector = getVector(move.from, move.to);
   const xFactor = Math.abs(vector.dx);
@@ -139,7 +147,9 @@ export const isValidMove = (
       factoredVector.dy === pattern.vec.dy
     );
   });
-  if (!isVectorValid) return "invalid-vector";
+  if (!isCastling && !isVectorValid) return "invalid-vector";
+  if (isCastling && !getIsCastlingValid({ position, moveHistory }, move))
+    return "invalid-castling";
 
   const futurePosition = {
     ...position,

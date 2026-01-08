@@ -1,10 +1,5 @@
-import type {
-  GameState,
-  Move,
-  Position,
-  RecordedMove,
-  SquareKey,
-} from "../types";
+import type { GameState, Move, RecordedMove } from "../types";
+import { POSSIBLE_CASTLE_MOVES } from "./special-moves/castle";
 import { isValidMove } from "./valid-move";
 
 export const makeMove = (
@@ -14,11 +9,20 @@ export const makeMove = (
   const result = isValidMove({ position, moveHistory }, move);
   if (result !== "success") throw new Error(result);
 
+  const castleMove = POSSIBLE_CASTLE_MOVES.find(
+    (castleMove) => castleMove.from === move.from && castleMove.to === move.to
+  );
+
   const newPosition = {
     ...position,
     [move.from]: null,
     [move.to]: { ...position[move.from]! },
-  } satisfies Position;
+  };
+
+  if (castleMove) {
+    newPosition[castleMove.rookFrom] = null;
+    newPosition[castleMove.rookTo] = { ...position[castleMove.rookFrom]! };
+  }
 
   const newMoveHistory = [
     ...moveHistory,
