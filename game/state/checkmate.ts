@@ -1,7 +1,10 @@
 import type { Color, GameState, SquareKey } from "../types";
 import { getIsBlackInCheck, getIsWhiteInCheck } from "./check";
 import { getIsWhiteTurn } from "./get-is-white-turn";
-import { isValidMove } from "./valid-move";
+import {
+  getBlackHasAnyValidMove,
+  getWhiteHasAnyValidMove,
+} from "./has-any-valid-move";
 
 type CheckmateResult = Color | null;
 
@@ -11,24 +14,9 @@ export const getIsCheckmate = (gameState: GameState): CheckmateResult => {
   if (isWhiteTurn) {
     const isWhiteInCheck = getIsWhiteInCheck(gameState);
     if (!isWhiteInCheck) return null;
-  
-    // can capture the piece attacking the king (could be multiple though)
-    // can block the check
 
-    const whiteKingSquare = Object.keys(gameState.position).find(
-      (key) =>
-        gameState.position[key as SquareKey]?.piece === "king" &&
-        gameState.position[key as SquareKey]?.color === "white"
-    ) as SquareKey;
-
-    const hasValidKingMove = Object.keys(gameState.position).some(
-      (squareKey) =>
-        isValidMove(gameState, {
-          from: whiteKingSquare,
-          to: squareKey as SquareKey,
-        }) === "success"
-    );
-    if (hasValidKingMove) return null;
+    const whiteHasAnyValidMove = getWhiteHasAnyValidMove(gameState);
+    if (whiteHasAnyValidMove) return null;
 
     return "black";
   }
@@ -37,20 +25,8 @@ export const getIsCheckmate = (gameState: GameState): CheckmateResult => {
     const isBlackInCheck = getIsBlackInCheck(gameState);
     if (!isBlackInCheck) return null;
 
-    const blackKingSquare = Object.keys(gameState.position).find(
-      (key) =>
-        gameState.position[key as SquareKey]?.piece === "king" &&
-        gameState.position[key as SquareKey]?.color === "black"
-    ) as SquareKey;
-
-    const hasValidKingMove = Object.keys(gameState.position).some(
-      (squareKey) =>
-        isValidMove(gameState, {
-          from: blackKingSquare,
-          to: squareKey as SquareKey,
-        }) === "success"
-    );
-    if (hasValidKingMove) return null;
+    const blackHasAnyValidMove = getBlackHasAnyValidMove(gameState);
+    if (blackHasAnyValidMove) return null;
 
     return "white";
   }
