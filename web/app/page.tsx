@@ -111,7 +111,7 @@ const Home = () => {
         onPromotion={onPromotion}
       />
 
-      <div className="flex flex-col p-4 h-full border-l border-gray-500 w-20">
+      <div className="flex flex-col p-4 h-full border-l border-gray-500 w-60">
         {getGroupedMoves(gameState.moveHistory).map(
           (moveGroup, moveGroupIndex) => (
             <div key={moveGroupIndex} className="flex items-center gap-2">

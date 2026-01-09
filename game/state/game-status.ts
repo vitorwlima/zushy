@@ -12,7 +12,8 @@ export type GameStatusResult =
   | "white-wins-by-checkmate"
   | "black-wins-by-checkmate"
   | "stalemate"
-  | "threefold-repetition";
+  | "threefold-repetition"
+  | "fifty-move-rule";
 
 export const getGameStatus = (gameState: GameState): GameStatusResult => {
   const isWhiteTurn = getIsWhiteTurn(gameState);
@@ -49,6 +50,24 @@ export const getGameStatus = (gameState: GameState): GameStatusResult => {
     });
 
     if (repeatedPositions.length === 3) return "threefold-repetition";
+  }
+
+  if (gameState.moveHistory.length >= 100) {
+    const last100Moves = gameState.moveHistory.slice(-103);
+    const pawnMoves = last100Moves.filter((move) => {
+      const moveIndex = gameState.moveHistory.indexOf(move);
+      const positionAfterMove = gameState.positionAfterMoveHistory[moveIndex];
+      if (positionAfterMove![move.to]?.piece === "pawn") return true;
+      return false;
+    });
+
+    const captures = last100Moves.filter((move) => {
+      const isCapture = move.notation.includes("x");
+      return isCapture;
+    });
+
+    if (pawnMoves.length === 0 && captures.length === 0)
+      return "fifty-move-rule";
   }
 
   if (isWhiteTurn) {

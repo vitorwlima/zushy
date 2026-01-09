@@ -55,7 +55,8 @@ export const getMoveNotation = (gameState: GameState, move: Move): string => {
   }
 
   const isCapturing =
-    gameState.position[move.to] !== null || getIsEnPassant(gameState, move);
+    (gameState.position[move.to] && gameState.position[move.to]?.color) ||
+    getIsEnPassant(gameState, move);
 
   const newPosition = buildNewPosition(gameState, move);
   const newGameState = {
@@ -79,10 +80,13 @@ export const getMoveNotation = (gameState: GameState, move: Move): string => {
   const pieceNotationSuffix =
     pieceNotation === "" && isCapturing ? move.from[0] : "";
   const statusSuffix = isMate ? "#" : isCheck ? "+" : "";
+  const promotionSuffix = move.promotion
+    ? PIECES.find((p) => p.name === move.promotion)!.notation
+    : "";
 
   const notation = `${pieceNotation}${pieceNotationSuffix}${differentiatingFactor}${
     isCapturing ? "x" : ""
-  }${move.to}${statusSuffix}`;
+  }${move.to}${promotionSuffix}${statusSuffix}`;
 
   return notation;
 };

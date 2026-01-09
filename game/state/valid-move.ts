@@ -118,9 +118,11 @@ export const isValidMove = (
       },
       move
     );
-  const isCastling = POSSIBLE_CASTLE_MOVES.some(
-    (castleMove) => castleMove.from === move.from && castleMove.to === move.to
-  );
+  const isCastling =
+    fromSquare?.piece === "king" &&
+    POSSIBLE_CASTLE_MOVES.some(
+      (castleMove) => castleMove.from === move.from && castleMove.to === move.to
+    );
 
   const vector = getVector(move.from, move.to);
   const xFactor = Math.abs(vector.dx);
@@ -217,7 +219,7 @@ export const isValidMove = (
     ? []
     : getSquaresBetween(move.from, move.to, factoredVector);
   const hasOtherPiecesBetween = squaresBetween.some(
-    (square) => position[square]
+    (square) => position[square] && position[square].color
   );
   if (hasOtherPiecesBetween) return "piece-in-the-way";
 
