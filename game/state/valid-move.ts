@@ -8,6 +8,7 @@ import {
   getIsCastlingValid,
   POSSIBLE_CASTLE_MOVES,
 } from "./special-moves/castle";
+import { getIsEnPassant } from "./special-moves/en-passant";
 
 type ValidMoveResult =
   | "success"
@@ -95,7 +96,8 @@ export const isValidMove = (
   const isCapturingSelf = fromSquare.color === toSquare?.color;
   if (isCapturingSelf) return "capturing-self";
 
-  const isCapturing = toSquare !== null;
+  const isCapturing =
+    toSquare !== null || getIsEnPassant({ position, moveHistory }, move);
   const isCastling = POSSIBLE_CASTLE_MOVES.some(
     (castleMove) => castleMove.from === move.from && castleMove.to === move.to
   );

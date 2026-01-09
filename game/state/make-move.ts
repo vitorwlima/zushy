@@ -1,5 +1,6 @@
 import type { GameState, Move, RecordedMove } from "../types";
 import { POSSIBLE_CASTLE_MOVES } from "./special-moves/castle";
+import { getIsEnPassant } from "./special-moves/en-passant";
 import { isValidMove } from "./valid-move";
 
 export const makeMove = (
@@ -12,6 +13,7 @@ export const makeMove = (
   const castleMove = POSSIBLE_CASTLE_MOVES.find(
     (castleMove) => castleMove.from === move.from && castleMove.to === move.to
   );
+  const isEnPassant = getIsEnPassant({ position, moveHistory }, move);
 
   const newPosition = {
     ...position,
@@ -22,6 +24,11 @@ export const makeMove = (
   if (castleMove) {
     newPosition[castleMove.rookFrom] = null;
     newPosition[castleMove.rookTo] = { ...position[castleMove.rookFrom]! };
+  }
+
+  if (isEnPassant) {
+    const lastMove = moveHistory[moveHistory.length - 1];
+    newPosition[lastMove!.to] = null;
   }
 
   if (move.promotion) {
