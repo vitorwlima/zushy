@@ -1,4 +1,3 @@
-import { initialPosition } from "../position";
 import type { Color, GameState, SquareKey } from "../types";
 import { isValidMove } from "./valid-move";
 
@@ -31,51 +30,31 @@ export const getIsSquareAttackedByColor = ({
 };
 
 export const getIsWhiteInCheck = (gameState: GameState) => {
-  const squares = Object.keys(initialPosition) as SquareKey[];
+  const squares = Object.keys(gameState.position) as SquareKey[];
   const whiteKingSquare = squares.find(
     (square) =>
       gameState.position[square]?.piece === "king" &&
       gameState.position[square]?.color === "white"
   ) as SquareKey;
 
-  const blackPieceSquares = squares.filter(
-    (square) => gameState.position[square]?.color === "black"
-  ) as SquareKey[];
-
-  return blackPieceSquares.some(
-    (square) =>
-      isValidMove(
-        gameState,
-        {
-          from: square,
-          to: whiteKingSquare,
-        },
-        { isCheckVerification: true }
-      ) === "success"
-  );
+  return getIsSquareAttackedByColor({
+    gameState,
+    square: whiteKingSquare,
+    color: "black",
+  });
 };
 
 export const getIsBlackInCheck = (gameState: GameState) => {
-  const squares = Object.keys(initialPosition) as SquareKey[];
+  const squares = Object.keys(gameState.position) as SquareKey[];
   const blackKingSquare = squares.find(
     (square) =>
       gameState.position[square]?.piece === "king" &&
       gameState.position[square]?.color === "black"
   ) as SquareKey;
 
-  const whitePieceSquares = squares.filter(
-    (square) => gameState.position[square]?.color === "white"
-  ) as SquareKey[];
-
-  return whitePieceSquares.some(
-    (square) =>
-      isValidMove(
-        gameState,
-        {
-          from: square,
-          to: blackKingSquare,
-        },
-        { isCheckVerification: true }
-      ) === "success"
-  );
+  return getIsSquareAttackedByColor({
+    gameState,
+    square: blackKingSquare,
+    color: "white",
+  });
 };

@@ -1,5 +1,9 @@
 import type { GameState, Move, SquareKey } from "../../types";
-import { getIsSquareAttackedByColor, getIsWhiteInCheck } from "../check";
+import {
+  getIsBlackInCheck,
+  getIsSquareAttackedByColor,
+  getIsWhiteInCheck,
+} from "../check";
 
 type CastleMove = Move & {
   rookFrom: SquareKey;
@@ -55,14 +59,28 @@ export const getIsCastlingValid = (
     return canWhiteCastleShortSide(gameState);
   }
 
+  if (castleMove.type === "white-long-side") {
+    return canWhiteCastleLongSide(gameState);
+  }
+
+  if (castleMove.type === "black-short-side") {
+    return canBlackCastleShortSide(gameState);
+  }
+
+  if (castleMove.type === "black-long-side") {
+    return canBlackCastleLongSide(gameState);
+  }
+
   return false;
 };
 
 export const canWhiteCastleShortSide = (gameState: GameState) => {
   const squaresBetween = ["f1", "g1"] as const;
+  const kingSquare = "e1" as const;
+  const rookSquare = "h1" as const;
 
   const hasWhiteKingOrRookMoved = gameState.moveHistory.some((move) => {
-    return move.from === "e1" || move.from === "h1";
+    return move.from === kingSquare || move.from === rookSquare;
   });
   if (hasWhiteKingOrRookMoved) return false;
 
@@ -79,6 +97,96 @@ export const canWhiteCastleShortSide = (gameState: GameState) => {
       gameState,
       square,
       color: "black",
+    })
+  );
+  if (isSomeOfTheSquaresBetweenAttacked) return false;
+
+  return true;
+};
+
+export const canWhiteCastleLongSide = (gameState: GameState) => {
+  const squaresBetween = ["b1", "c1", "d1"] as const;
+  const kingSquare = "e1" as const;
+  const rookSquare = "a1" as const;
+
+  const hasWhiteKingOrRookMoved = gameState.moveHistory.some((move) => {
+    return move.from === kingSquare || move.from === rookSquare;
+  });
+  if (hasWhiteKingOrRookMoved) return false;
+
+  const hasPiecesInBetween = squaresBetween.some(
+    (square) => gameState.position[square] !== null
+  );
+  if (hasPiecesInBetween) return false;
+
+  const isInCheck = getIsWhiteInCheck(gameState);
+  if (isInCheck) return false;
+
+  const isSomeOfTheSquaresBetweenAttacked = squaresBetween.some((square) =>
+    getIsSquareAttackedByColor({
+      gameState,
+      square,
+      color: "black",
+    })
+  );
+  if (isSomeOfTheSquaresBetweenAttacked) return false;
+
+  return true;
+};
+
+export const canBlackCastleShortSide = (gameState: GameState) => {
+  const squaresBetween = ["f8", "g8"] as const;
+  const kingSquare = "e8" as const;
+  const rookSquare = "h8" as const;
+
+  const hasBlackKingOrRookMoved = gameState.moveHistory.some((move) => {
+    return move.from === kingSquare || move.from === rookSquare;
+  });
+  if (hasBlackKingOrRookMoved) return false;
+
+  const hasPiecesInBetween = squaresBetween.some(
+    (square) => gameState.position[square] !== null
+  );
+  if (hasPiecesInBetween) return false;
+
+  const isInCheck = getIsBlackInCheck(gameState);
+  if (isInCheck) return false;
+
+  const isSomeOfTheSquaresBetweenAttacked = squaresBetween.some((square) =>
+    getIsSquareAttackedByColor({
+      gameState,
+      square,
+      color: "white",
+    })
+  );
+  if (isSomeOfTheSquaresBetweenAttacked) return false;
+
+  return true;
+};
+
+export const canBlackCastleLongSide = (gameState: GameState) => {
+  const squaresBetween = ["b8", "c8", "d8"] as const;
+  const kingSquare = "e8" as const;
+  const rookSquare = "a8" as const;
+
+  const hasBlackKingOrRookMoved = gameState.moveHistory.some((move) => {
+    return move.from === kingSquare || move.from === rookSquare;
+  });
+  if (hasBlackKingOrRookMoved) return false;
+
+  const hasPiecesInBetween = squaresBetween.some(
+    (square) => gameState.position[square] !== null
+  );
+  if (hasPiecesInBetween) return false;
+
+  const isInCheck = getIsBlackInCheck(gameState);
+  if (isInCheck) return false;
+
+  const isSomeOfTheSquaresBetweenAttacked = squaresBetween.some((square) =>
+    getIsSquareAttackedByColor({
+      gameState,
+      square,
+      color: "white",
     })
   );
   if (isSomeOfTheSquaresBetweenAttacked) return false;
