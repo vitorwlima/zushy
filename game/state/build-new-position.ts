@@ -2,14 +2,13 @@ import type { GameState, Move } from "../types";
 import { POSSIBLE_CASTLE_MOVES } from "./special-moves/castle";
 import { getIsEnPassant } from "./special-moves/en-passant";
 
-export const buildNewPosition = (
-  { position, moveHistory }: GameState,
-  move: Move
-) => {
+export const buildNewPosition = (gameState: GameState, move: Move) => {
   const castleMove = POSSIBLE_CASTLE_MOVES.find(
     (castleMove) => castleMove.from === move.from && castleMove.to === move.to
   );
-  const isEnPassant = getIsEnPassant({ position, moveHistory }, move);
+  const isEnPassant = getIsEnPassant(gameState, move);
+
+  const { position, moveHistory } = gameState;
 
   const newPosition = {
     ...position,

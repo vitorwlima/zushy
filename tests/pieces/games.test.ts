@@ -9,6 +9,8 @@ describe("games", () => {
     const gameState = {
       position: initialPosition,
       moveHistory: [],
+      positionAfterMoveHistory: [],
+      threefoldRepetitionHistory: [],
     };
 
     const move1 = makeMove(gameState, { from: "e2", to: "e4" });
@@ -47,6 +49,8 @@ describe("games", () => {
     const gameState = {
       position: initialPosition,
       moveHistory: [],
+      positionAfterMoveHistory: [],
+      threefoldRepetitionHistory: [],
     };
 
     const move1 = makeMove(gameState, { from: "e2", to: "e4" });
@@ -67,6 +71,8 @@ describe("games", () => {
     const gameState = {
       position: initialPosition,
       moveHistory: [],
+      positionAfterMoveHistory: [],
+      threefoldRepetitionHistory: [],
     };
 
     const move1 = makeMove(gameState, { from: "e2", to: "e3" });

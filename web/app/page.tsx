@@ -26,6 +26,8 @@ const Home = () => {
   const [gameState, setGameState] = useState<GameState>({
     position: initialPosition,
     moveHistory: [],
+    positionAfterMoveHistory: [],
+    threefoldRepetitionHistory: [],
   });
   const [highlightedSquares, setHighlightedSquares] = useState<SquareKey[]>([]);
   const [isPromotingOnSquare, setIsPromotingOnSquare] =
@@ -37,14 +39,13 @@ const Home = () => {
     if (highlightedSquares.length === 1 && highlightedSquares[0] !== code) {
       try {
         if (
-          (gameState.position[highlightedSquares[0]]?.piece === "pawn" &&
-            isValidMove(gameState, {
-              from: highlightedSquares[0],
-              to: code,
-              promotion: "queen",
-            }) === "success" &&
-            code.endsWith("8")) ||
-          code.endsWith("1")
+          gameState.position[highlightedSquares[0]]?.piece === "pawn" &&
+          isValidMove(gameState, {
+            from: highlightedSquares[0],
+            to: code,
+            promotion: "queen",
+          }) === "success" &&
+          (code.endsWith("8") || code.endsWith("1"))
         ) {
           setIsPromotingOnSquare(code);
           return;
@@ -111,16 +112,21 @@ const Home = () => {
       />
 
       <div className="flex flex-col p-4 h-full border-l border-gray-500 w-20">
-        {getGroupedMoves(gameState.moveHistory).map((moveGroup, index) => (
-          <div key={index} className="flex items-center gap-2">
-            <span className="text-gray-100">{index + 1}.</span>
-            {moveGroup.map((move) => (
-              <div key={move.notation} className="text-gray-100">
-                {move.notation}
-              </div>
-            ))}
-          </div>
-        ))}
+        {getGroupedMoves(gameState.moveHistory).map(
+          (moveGroup, moveGroupIndex) => (
+            <div key={moveGroupIndex} className="flex items-center gap-2">
+              <span className="text-gray-100">{moveGroupIndex + 1}.</span>
+              {moveGroup.map((move, moveIndex) => (
+                <div
+                  key={`${move.notation}-${moveIndex}-${moveGroupIndex}`}
+                  className="text-gray-100"
+                >
+                  {move.notation}
+                </div>
+              ))}
+            </div>
+          )
+        )}
       </div>
     </div>
   );

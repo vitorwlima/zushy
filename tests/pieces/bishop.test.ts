@@ -13,6 +13,8 @@ describe("bishop", () => {
           h6: { color: "white", piece: "king" },
         },
         moveHistory: [],
+        positionAfterMoveHistory: [],
+        threefoldRepetitionHistory: [],
       },
       { from: "c1", to: "d2" }
     );
@@ -32,6 +34,8 @@ describe("bishop", () => {
           h6: { color: "white", piece: "king" },
         },
         moveHistory: [],
+        positionAfterMoveHistory: [],
+        threefoldRepetitionHistory: [],
       },
       { from: "c1", to: "f4" }
     );
@@ -43,7 +47,12 @@ describe("bishop", () => {
   it("should not move successfully (capturing self)", () => {
     expect(() =>
       makeMove(
-        { position: initialPosition, moveHistory: [] },
+        {
+          position: initialPosition,
+          moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         { from: "c1", to: "b2" }
       )
     ).toThrowError("capturing-self");
@@ -52,7 +61,12 @@ describe("bishop", () => {
   it("should not move successfully (piece in the way)", () => {
     expect(() =>
       makeMove(
-        { position: initialPosition, moveHistory: [] },
+        {
+          position: initialPosition,
+          moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         { from: "c1", to: "a3" }
       )
     ).toThrowError("piece-in-the-way");
@@ -69,6 +83,8 @@ describe("bishop", () => {
             h6: { color: "white", piece: "king" },
           },
           moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
         },
         { from: "e5", to: "d3" }
       )
@@ -86,6 +102,8 @@ describe("bishop", () => {
             h6: { color: "white", piece: "king" },
           },
           moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
         },
         { from: "e5", to: "e1" }
       )

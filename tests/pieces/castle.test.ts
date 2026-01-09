@@ -7,6 +7,8 @@ describe("castle", () => {
     const gameState = {
       position: initialPosition,
       moveHistory: [],
+      positionAfterMoveHistory: [],
+      threefoldRepetitionHistory: [],
     };
 
     const move1 = makeMove(gameState, { from: "e2", to: "e4" });
@@ -45,6 +47,8 @@ describe("castle", () => {
     const gameState = {
       position: initialPosition,
       moveHistory: [],
+      positionAfterMoveHistory: [],
+      threefoldRepetitionHistory: [],
     };
 
     const move1 = makeMove(gameState, { from: "d2", to: "d4" });
@@ -85,6 +89,8 @@ describe("castle", () => {
     const gameState = {
       position: initialPosition,
       moveHistory: [],
+      positionAfterMoveHistory: [],
+      threefoldRepetitionHistory: [],
     };
 
     const move1 = makeMove(gameState, { from: "e2", to: "e4" });
@@ -104,6 +110,8 @@ describe("castle", () => {
     const gameState = {
       position: initialPosition,
       moveHistory: [],
+      positionAfterMoveHistory: [],
+      threefoldRepetitionHistory: [],
     };
 
     const move1 = makeMove(gameState, { from: "e2", to: "e4" });
@@ -119,6 +127,8 @@ describe("castle", () => {
     const gameState = {
       position: initialPosition,
       moveHistory: [],
+      positionAfterMoveHistory: [],
+      threefoldRepetitionHistory: [],
     };
 
     const move1 = makeMove(gameState, { from: "e2", to: "e4" });
@@ -144,6 +154,8 @@ describe("castle", () => {
             e8: { color: "black", piece: "king" },
           },
           moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
         },
         { from: "e1", to: "g1" }
       )
@@ -161,6 +173,8 @@ describe("castle", () => {
             h1: { color: "white", piece: "bishop" },
           },
           moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
         },
         { from: "e1", to: "g1" }
       )

@@ -12,6 +12,8 @@ describe("king", () => {
           h8: { color: "black", piece: "king" },
         },
         moveHistory: [],
+        positionAfterMoveHistory: [],
+        threefoldRepetitionHistory: [],
       },
       { from: "h6", to: "h5" }
     );
@@ -30,6 +32,8 @@ describe("king", () => {
           e2: { color: "black", piece: "rook" },
         },
         moveHistory: [],
+        positionAfterMoveHistory: [],
+        threefoldRepetitionHistory: [],
       },
       { from: "e1", to: "e2" }
     );
@@ -41,7 +45,12 @@ describe("king", () => {
   it("should not move successfully (capturing self)", () => {
     expect(() =>
       makeMove(
-        { position: initialPosition, moveHistory: [] },
+        {
+          position: initialPosition,
+          moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         { from: "e1", to: "e1" }
       )
     ).toThrowError("capturing-self");
@@ -57,6 +66,8 @@ describe("king", () => {
             h6: { color: "white", piece: "king" },
           },
           moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
         },
         { from: "h6", to: "f5" }
       )
@@ -73,6 +84,8 @@ describe("king", () => {
             e8: { color: "black", piece: "king" },
           },
           moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
         },
         { from: "e1", to: "h1" }
       )

@@ -13,6 +13,8 @@ describe("queen", () => {
           h6: { color: "white", piece: "king" },
         },
         moveHistory: [],
+        positionAfterMoveHistory: [],
+        threefoldRepetitionHistory: [],
       },
       { from: "c1", to: "c2" }
     );
@@ -32,6 +34,8 @@ describe("queen", () => {
           h6: { color: "white", piece: "king" },
         },
         moveHistory: [],
+        positionAfterMoveHistory: [],
+        threefoldRepetitionHistory: [],
       },
       { from: "c1", to: "f1" }
     );
@@ -43,7 +47,12 @@ describe("queen", () => {
   it("should not move successfully (capturing self)", () => {
     expect(() =>
       makeMove(
-        { position: initialPosition, moveHistory: [] },
+        {
+          position: initialPosition,
+          moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         { from: "a1", to: "b1" }
       )
     ).toThrowError("capturing-self");
@@ -52,7 +61,12 @@ describe("queen", () => {
   it("should not move successfully (piece in the way)", () => {
     expect(() =>
       makeMove(
-        { position: initialPosition, moveHistory: [] },
+        {
+          position: initialPosition,
+          moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         { from: "a1", to: "a5" }
       )
     ).toThrowError("piece-in-the-way");
@@ -69,6 +83,8 @@ describe("queen", () => {
             h6: { color: "white", piece: "king" },
           },
           moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
         },
         { from: "e5", to: "d3" }
       )
@@ -85,6 +101,8 @@ describe("queen", () => {
           h6: { color: "white", piece: "king" },
         },
         moveHistory: [],
+        positionAfterMoveHistory: [],
+        threefoldRepetitionHistory: [],
       },
       { from: "c1", to: "d2" }
     );
@@ -104,6 +122,8 @@ describe("queen", () => {
           h6: { color: "white", piece: "king" },
         },
         moveHistory: [],
+        positionAfterMoveHistory: [],
+        threefoldRepetitionHistory: [],
       },
       { from: "c1", to: "f4" }
     );
@@ -115,7 +135,12 @@ describe("queen", () => {
   it("should not move successfully (capturing self)", () => {
     expect(() =>
       makeMove(
-        { position: initialPosition, moveHistory: [] },
+        {
+          position: initialPosition,
+          moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         { from: "c1", to: "b2" }
       )
     ).toThrowError("capturing-self");
@@ -124,7 +149,12 @@ describe("queen", () => {
   it("should not move successfully (piece in the way)", () => {
     expect(() =>
       makeMove(
-        { position: initialPosition, moveHistory: [] },
+        {
+          position: initialPosition,
+          moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         { from: "c1", to: "a3" }
       )
     ).toThrowError("piece-in-the-way");
@@ -141,6 +171,8 @@ describe("queen", () => {
             h6: { color: "white", piece: "king" },
           },
           moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
         },
         { from: "e5", to: "d3" }
       )

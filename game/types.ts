@@ -84,7 +84,22 @@ export type RecordedMove = Move & {
   notation: string;
 };
 
+export type CastleType =
+  | "white-short-side"
+  | "white-long-side"
+  | "black-short-side"
+  | "black-long-side";
+
+export type ThreefoldStatus = {
+  turn: Color;
+  castlingRights: CastleType[];
+  enPassantSquare: SquareKey | null;
+  positionString: string;
+};
+
 export type GameState = {
   position: Position;
   moveHistory: RecordedMove[];
+  positionAfterMoveHistory: Position[];
+  threefoldRepetitionHistory: ThreefoldStatus[];
 };

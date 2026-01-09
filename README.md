@@ -30,5 +30,5 @@ This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) 
 - [x] Implement en passant
 - [x] Implement promotion
 - [x] Implement stalemate
-- [ ] Implement threefold repetition
+- [x] Implement threefold repetition
 - [ ] Implement fifty-move rule

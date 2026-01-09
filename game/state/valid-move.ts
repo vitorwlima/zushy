@@ -77,7 +77,12 @@ const getSquaresBetween = (
 };
 
 export const isValidMove = (
-  { position, moveHistory }: GameState,
+  {
+    position,
+    moveHistory,
+    positionAfterMoveHistory,
+    threefoldRepetitionHistory,
+  }: GameState,
   move: Move,
   options: ValidMoveOptions = {}
 ): ValidMoveResult => {
@@ -85,7 +90,12 @@ export const isValidMove = (
   const toSquare = position[move.to];
   if (!fromSquare) return "no-piece-in-from-square";
 
-  const isWhiteTurn = getIsWhiteTurn({ position, moveHistory });
+  const isWhiteTurn = getIsWhiteTurn({
+    position,
+    moveHistory,
+    positionAfterMoveHistory,
+    threefoldRepetitionHistory,
+  });
   if (!options.isCheckVerification) {
     const isColorTurn = fromSquare?.color === (isWhiteTurn ? "white" : "black");
     if (!isColorTurn) return "not-color-turn";
@@ -98,7 +108,16 @@ export const isValidMove = (
   if (isCapturingSelf) return "capturing-self";
 
   const isCapturing =
-    toSquare !== null || getIsEnPassant({ position, moveHistory }, move);
+    toSquare !== null ||
+    getIsEnPassant(
+      {
+        position,
+        moveHistory,
+        positionAfterMoveHistory,
+        threefoldRepetitionHistory,
+      },
+      move
+    );
   const isCastling = POSSIBLE_CASTLE_MOVES.some(
     (castleMove) => castleMove.from === move.from && castleMove.to === move.to
   );
@@ -152,19 +171,42 @@ export const isValidMove = (
     );
   });
   if (!isCastling && !isVectorValid) return "invalid-vector";
-  if (isCastling && !getIsCastlingValid({ position, moveHistory }, move))
+  if (
+    isCastling &&
+    !getIsCastlingValid(
+      {
+        position,
+        moveHistory,
+        positionAfterMoveHistory,
+        threefoldRepetitionHistory,
+      },
+      move
+    )
+  )
     return "invalid-castling";
 
-  const futurePosition = buildNewPosition({ position, moveHistory }, move);
+  const futurePosition = buildNewPosition(
+    {
+      position,
+      moveHistory,
+      positionAfterMoveHistory,
+      threefoldRepetitionHistory,
+    },
+    move
+  );
 
   if (!options.isCheckVerification) {
     const wouldWhiteBeInCheck = getIsWhiteInCheck({
       position: futurePosition,
-      moveHistory: [...moveHistory, { ...move, notation: "tbd" }],
+      moveHistory: [...moveHistory, { ...move, notation: "blank" }],
+      positionAfterMoveHistory: [...positionAfterMoveHistory, futurePosition],
+      threefoldRepetitionHistory: [...threefoldRepetitionHistory],
     });
     const wouldBlackBeInCheck = getIsBlackInCheck({
       position: futurePosition,
-      moveHistory: [...moveHistory, { ...move, notation: "tbd" }],
+      moveHistory: [...moveHistory, { ...move, notation: "blank" }],
+      positionAfterMoveHistory: [...positionAfterMoveHistory, futurePosition],
+      threefoldRepetitionHistory: [...threefoldRepetitionHistory],
     });
 
     if (wouldWhiteBeInCheck && isWhiteTurn) return "in-check";

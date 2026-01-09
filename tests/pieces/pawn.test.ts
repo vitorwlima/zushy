@@ -7,7 +7,12 @@ describe("pawn", () => {
   describe("white", () => {
     it("should move successfully", () => {
       const { position: newPosition } = makeMove(
-        { position: initialPosition, moveHistory: [] },
+        {
+          position: initialPosition,
+          moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         { from: "a2", to: "a3" }
       );
 
@@ -17,7 +22,12 @@ describe("pawn", () => {
 
     it("should move successfully", () => {
       const { position: newPosition } = makeMove(
-        { position: initialPosition, moveHistory: [] },
+        {
+          position: initialPosition,
+          moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         { from: "a2", to: "a4" }
       );
 
@@ -27,7 +37,12 @@ describe("pawn", () => {
 
     it("should move successfully", () => {
       const { position: pawnForwardPosition } = makeMove(
-        { position: initialPosition, moveHistory: [] },
+        {
+          position: initialPosition,
+          moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         {
           from: "a2",
           to: "a3",
@@ -35,7 +50,12 @@ describe("pawn", () => {
       );
 
       const { position: newPosition } = makeMove(
-        { position: pawnForwardPosition, moveHistory: [] },
+        {
+          position: pawnForwardPosition,
+          moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         {
           from: "a3",
           to: "a4",
@@ -48,7 +68,12 @@ describe("pawn", () => {
 
     it("should not move successfully (invalid vector)", () => {
       const { position: pawnForwardPosition } = makeMove(
-        { position: initialPosition, moveHistory: [] },
+        {
+          position: initialPosition,
+          moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         {
           from: "a2",
           to: "a3",
@@ -57,7 +82,12 @@ describe("pawn", () => {
 
       expect(() =>
         makeMove(
-          { position: pawnForwardPosition, moveHistory: [] },
+          {
+            position: pawnForwardPosition,
+            moveHistory: [],
+            positionAfterMoveHistory: [],
+            threefoldRepetitionHistory: [],
+          },
           { from: "a3", to: "a5" }
         )
       ).toThrowError("invalid-vector");
@@ -74,6 +104,8 @@ describe("pawn", () => {
             d5: { color: "black", piece: "pawn" },
           },
           moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
         },
         { from: "c4", to: "d5" }
       );
@@ -86,7 +118,12 @@ describe("pawn", () => {
   describe("black", () => {
     it("should move successfully", () => {
       const { position: newPosition } = makeMove(
-        { position: initialPosition, moveHistory: [mockMove] },
+        {
+          position: initialPosition,
+          moveHistory: [mockMove],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         { from: "e7", to: "e6" }
       );
 
@@ -96,7 +133,12 @@ describe("pawn", () => {
 
     it("should move successfully", () => {
       const { position: newPosition } = makeMove(
-        { position: initialPosition, moveHistory: [mockMove] },
+        {
+          position: initialPosition,
+          moveHistory: [mockMove],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         { from: "a7", to: "a5" }
       );
 
@@ -106,7 +148,12 @@ describe("pawn", () => {
 
     it("should move successfully", () => {
       const { position: pawnForwardPosition } = makeMove(
-        { position: initialPosition, moveHistory: [mockMove] },
+        {
+          position: initialPosition,
+          moveHistory: [mockMove],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         {
           from: "a7",
           to: "a6",
@@ -114,7 +161,12 @@ describe("pawn", () => {
       );
 
       const { position: newPosition } = makeMove(
-        { position: pawnForwardPosition, moveHistory: [mockMove] },
+        {
+          position: pawnForwardPosition,
+          moveHistory: [mockMove],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         {
           from: "a6",
           to: "a5",
@@ -128,7 +180,12 @@ describe("pawn", () => {
 
     it("should not move successfully (invalid vector)", () => {
       const { position: pawnForwardPosition } = makeMove(
-        { position: initialPosition, moveHistory: [mockMove] },
+        {
+          position: initialPosition,
+          moveHistory: [mockMove],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
+        },
         {
           from: "a7",
           to: "a6",
@@ -137,7 +194,12 @@ describe("pawn", () => {
 
       expect(() =>
         makeMove(
-          { position: pawnForwardPosition, moveHistory: [mockMove] },
+          {
+            position: pawnForwardPosition,
+            moveHistory: [mockMove],
+            positionAfterMoveHistory: [],
+            threefoldRepetitionHistory: [],
+          },
           { from: "a6", to: "a4" }
         )
       ).toThrowError("invalid-vector");
@@ -154,6 +216,8 @@ describe("pawn", () => {
             d5: { color: "black", piece: "pawn" },
           },
           moveHistory: [mockMove],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
         },
         { from: "d5", to: "c4" }
       );
@@ -175,6 +239,8 @@ describe("pawn", () => {
               a7: { color: "white", piece: "pawn" },
             },
             moveHistory: [],
+            positionAfterMoveHistory: [],
+            threefoldRepetitionHistory: [],
           },
           { from: "a7", to: "a8" }
         )
@@ -191,6 +257,8 @@ describe("pawn", () => {
             a7: { color: "white", piece: "pawn" },
           },
           moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
         },
         { from: "a7", to: "a8", promotion: "queen" }
       );
@@ -209,6 +277,8 @@ describe("pawn", () => {
             a7: { color: "white", piece: "pawn" },
           },
           moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
         },
         { from: "a7", to: "a8", promotion: "rook" }
       );
@@ -227,6 +297,8 @@ describe("pawn", () => {
             a7: { color: "white", piece: "pawn" },
           },
           moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
         },
         { from: "a7", to: "a8", promotion: "bishop" }
       );
@@ -245,6 +317,8 @@ describe("pawn", () => {
             a7: { color: "white", piece: "pawn" },
           },
           moveHistory: [],
+          positionAfterMoveHistory: [],
+          threefoldRepetitionHistory: [],
         },
         { from: "a7", to: "a8", promotion: "knight" }
       );
@@ -259,6 +333,8 @@ describe("pawn", () => {
       const gameState = {
         position: initialPosition,
         moveHistory: [],
+        positionAfterMoveHistory: [],
+        threefoldRepetitionHistory: [],
       };
 
       const move1 = makeMove(gameState, { from: "e2", to: "e4" });
@@ -280,6 +356,8 @@ describe("pawn", () => {
       const gameState = {
         position: initialPosition,
         moveHistory: [],
+        positionAfterMoveHistory: [],
+        threefoldRepetitionHistory: [],
       };
 
       const move1 = makeMove(gameState, { from: "a2", to: "a3" });
@@ -313,6 +391,8 @@ describe("pawn", () => {
               { from: "e2", to: "e4", notation: "e4" },
               { from: "d6", to: "d5", notation: "d5" },
             ],
+            positionAfterMoveHistory: [],
+            threefoldRepetitionHistory: [],
           },
           { from: "e5", to: "d6" }
         )
@@ -323,6 +403,8 @@ describe("pawn", () => {
       const gameState = {
         position: initialPosition,
         moveHistory: [],
+        positionAfterMoveHistory: [],
+        threefoldRepetitionHistory: [],
       };
 
       const move1 = makeMove(gameState, { from: "e2", to: "e4" });
@@ -352,6 +434,8 @@ describe("pawn", () => {
               { from: "e2", to: "e4", notation: "e4" },
               { from: "f6", to: "d5", notation: "Nd5" },
             ],
+            positionAfterMoveHistory: [],
+            threefoldRepetitionHistory: [],
           },
           { from: "e5", to: "d6" }
         )
@@ -373,6 +457,8 @@ describe("pawn", () => {
               { from: "h2", to: "h3", notation: "h3" },
               { from: "d7", to: "d5", notation: "Rd5" },
             ],
+            positionAfterMoveHistory: [],
+            threefoldRepetitionHistory: [],
           },
           { from: "e5", to: "d6" }
         )
@@ -395,6 +481,8 @@ describe("pawn", () => {
               { from: "h2", to: "h3", notation: "h3" },
               { from: "d7", to: "d5", notation: "d5" },
             ],
+            positionAfterMoveHistory: [],
+            threefoldRepetitionHistory: [],
           },
           { from: "e5", to: "d6" }
         )

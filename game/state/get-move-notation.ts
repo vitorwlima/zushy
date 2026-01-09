@@ -60,7 +60,12 @@ export const getMoveNotation = (gameState: GameState, move: Move): string => {
   const newPosition = buildNewPosition(gameState, move);
   const newGameState = {
     position: newPosition,
-    moveHistory: [...gameState.moveHistory, { ...move, notation: "" }],
+    moveHistory: [...gameState.moveHistory, { ...move, notation: "blank" }],
+    positionAfterMoveHistory: [
+      ...gameState.positionAfterMoveHistory,
+      newPosition,
+    ],
+    threefoldRepetitionHistory: [...gameState.threefoldRepetitionHistory],
   } satisfies GameState;
   const gameStatus = getGameStatus(newGameState);
   const isCheck =

@@ -11,10 +11,45 @@ export type GameStatusResult =
   | "black-to-play"
   | "white-wins-by-checkmate"
   | "black-wins-by-checkmate"
-  | "stalemate";
+  | "stalemate"
+  | "threefold-repetition";
 
 export const getGameStatus = (gameState: GameState): GameStatusResult => {
   const isWhiteTurn = getIsWhiteTurn(gameState);
+  const threefoldStatus =
+    gameState.threefoldRepetitionHistory[
+      gameState.threefoldRepetitionHistory.length - 1
+    ];
+
+  if (threefoldStatus) {
+    const repeatedPositions = (
+      gameState.threefoldRepetitionHistory ?? []
+    ).filter((status) => {
+      const positionMatches =
+        status.positionString === threefoldStatus.positionString;
+      if (!positionMatches) return false;
+
+      const colorMatches = status.turn === threefoldStatus.turn;
+      if (!colorMatches) return false;
+
+      const castlingAmountMatches =
+        status.castlingRights.length === threefoldStatus.castlingRights.length;
+      if (!castlingAmountMatches) return false;
+
+      const castlingRightsMatch = status.castlingRights.every((right) =>
+        threefoldStatus.castlingRights.includes(right)
+      );
+      if (!castlingRightsMatch) return false;
+
+      const enPassantSquareMatches =
+        status.enPassantSquare === threefoldStatus.enPassantSquare;
+      if (!enPassantSquareMatches) return false;
+
+      return true;
+    });
+
+    if (repeatedPositions.length === 3) return "threefold-repetition";
+  }
 
   if (isWhiteTurn) {
     const whiteHasAnyValidMove = getWhiteHasAnyValidMove(gameState);
