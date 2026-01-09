@@ -19,10 +19,14 @@ export const ChessBoard = ({
   gameState,
   onSquareClick,
   highlightedSquares,
+  isPromotingOnSquare,
+  onPromotion,
 }: {
   gameState: GameState;
   onSquareClick: (code: SquareKey) => void;
   highlightedSquares: SquareKey[];
+  isPromotingOnSquare: SquareKey | null;
+  onPromotion: (promotion: "queen" | "rook" | "bishop" | "knight") => void;
 }) => {
   const isWhiteTurn = getIsWhiteTurn(gameState);
   const checkmateResult = getIsCheckmate(gameState);
@@ -37,12 +41,14 @@ export const ChessBoard = ({
             (piece?.color === "white" && !isWhiteTurn) ||
             (piece?.color === "black" && isWhiteTurn));
         const isDisabled = isDisabledByTurn || checkmateResult !== null;
+        const isPromoting = isPromotingOnSquare === code;
+        const promotionColor = gameState.position[highlightedSquares[0]]?.color;
 
         return (
           <div
             key={code}
             className={cn(
-              "size-20 flex items-center justify-center transition-colors duration-150",
+              "size-20 flex relative items-center justify-center overflow-visible transition-colors duration-150",
               color === "white" ? "bg-cyan-100/50" : "bg-cyan-700/80",
               highlightedSquares.includes(code) ? "bg-amber-400" : ""
             )}
@@ -63,6 +69,37 @@ export const ChessBoard = ({
                 width={80}
                 draggable={false}
               />
+            )}
+
+            {isPromoting && promotionColor && (
+              <div
+                className={
+                  "absolute top-0 right-0 bg-gray-500 w-20 h-80 z-10 transition-opacity duration-150"
+                }
+              >
+                {(["queen", "rook", "bishop", "knight"] as const).map(
+                  (promotingPiece) => (
+                    <div
+                      className="size-20 flex items-center justify-center"
+                      key={promotingPiece}
+                      onClick={() => {
+                        if (isDisabled) return;
+                        onPromotion(promotingPiece);
+                      }}
+                    >
+                      <Image
+                        src={`/pieces/cardinal/${promotionColor.slice(0, 1)}${
+                          pieceAbreviation[promotingPiece]
+                        }.svg`}
+                        alt={code}
+                        height={80}
+                        width={80}
+                        draggable={false}
+                      />
+                    </div>
+                  )
+                )}
+              </div>
             )}
           </div>
         );
