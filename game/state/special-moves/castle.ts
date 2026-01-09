@@ -79,6 +79,11 @@ export const canWhiteCastleShortSide = (gameState: GameState) => {
   const kingSquare = "e1" as const;
   const rookSquare = "h1" as const;
 
+  const king = gameState.position[kingSquare];
+  const rook = gameState.position[rookSquare];
+  if (king?.piece !== "king" || king.color !== "white") return false;
+  if (rook?.piece !== "rook" || rook.color !== "white") return false;
+
   const hasWhiteKingOrRookMoved = gameState.moveHistory.some((move) => {
     return move.from === kingSquare || move.from === rookSquare;
   });
@@ -108,6 +113,11 @@ export const canWhiteCastleLongSide = (gameState: GameState) => {
   const squaresBetween = ["b1", "c1", "d1"] as const;
   const kingSquare = "e1" as const;
   const rookSquare = "a1" as const;
+
+  const king = gameState.position[kingSquare];
+  const rook = gameState.position[rookSquare];
+  if (king?.piece !== "king" || king.color !== "white") return false;
+  if (rook?.piece !== "rook" || rook.color !== "white") return false;
 
   const hasWhiteKingOrRookMoved = gameState.moveHistory.some((move) => {
     return move.from === kingSquare || move.from === rookSquare;
@@ -139,6 +149,11 @@ export const canBlackCastleShortSide = (gameState: GameState) => {
   const kingSquare = "e8" as const;
   const rookSquare = "h8" as const;
 
+  const king = gameState.position[kingSquare];
+  const rook = gameState.position[rookSquare];
+  if (king?.piece !== "king" || king.color !== "black") return false;
+  if (rook?.piece !== "rook" || rook.color !== "black") return false;
+
   const hasBlackKingOrRookMoved = gameState.moveHistory.some((move) => {
     return move.from === kingSquare || move.from === rookSquare;
   });
@@ -168,6 +183,11 @@ export const canBlackCastleLongSide = (gameState: GameState) => {
   const squaresBetween = ["b8", "c8", "d8"] as const;
   const kingSquare = "e8" as const;
   const rookSquare = "a8" as const;
+
+  const king = gameState.position[kingSquare];
+  const rook = gameState.position[rookSquare];
+  if (king?.piece !== "king" || king.color !== "black") return false;
+  if (rook?.piece !== "rook" || rook.color !== "black") return false;
 
   const hasBlackKingOrRookMoved = gameState.moveHistory.some((move) => {
     return move.from === kingSquare || move.from === rookSquare;

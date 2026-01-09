@@ -357,5 +357,48 @@ describe("pawn", () => {
         )
       ).toThrowError("invalid-vector");
     });
+
+    it("should not capture en passant when the last moved piece was not a pawn (even if it moved 2 squares)", () => {
+      expect(() =>
+        makeMove(
+          {
+            position: {
+              ...emptyPosition,
+              e6: { color: "white", piece: "king" },
+              e8: { color: "black", piece: "king" },
+              e5: { color: "white", piece: "pawn" },
+              d5: { color: "black", piece: "rook" },
+            },
+            moveHistory: [
+              { from: "h2", to: "h3", notation: "h3" },
+              { from: "d7", to: "d5", notation: "Rd5" },
+            ],
+          },
+          { from: "e5", to: "d6" }
+        )
+      ).toThrowError("invalid-vector");
+    });
+
+    it("should not allow en passant if it exposes own king to check (captured pawn removed)", () => {
+      expect(() =>
+        makeMove(
+          {
+            position: {
+              ...emptyPosition,
+              e6: { color: "white", piece: "king" },
+              h8: { color: "black", piece: "king" },
+              e5: { color: "white", piece: "pawn" },
+              d5: { color: "black", piece: "pawn" },
+              a2: { color: "black", piece: "bishop" },
+            },
+            moveHistory: [
+              { from: "h2", to: "h3", notation: "h3" },
+              { from: "d7", to: "d5", notation: "d5" },
+            ],
+          },
+          { from: "e5", to: "d6" }
+        )
+      ).toThrowError("in-check");
+    });
   });
 });

@@ -2,6 +2,7 @@ import type { Pattern, Vec } from "../pieces";
 import { PIECES } from "../pieces/all";
 import { initialPosition } from "../position";
 import type { Move, SquareKey, GameState, Position } from "../types";
+import { buildNewPosition } from "./build-new-position";
 import { getIsBlackInCheck, getIsWhiteInCheck } from "./check";
 import { getIsWhiteTurn } from "./get-is-white-turn";
 import {
@@ -154,11 +155,7 @@ export const isValidMove = (
   if (isCastling && !getIsCastlingValid({ position, moveHistory }, move))
     return "invalid-castling";
 
-  const futurePosition = {
-    ...position,
-    [move.from]: null,
-    [move.to]: { ...fromSquare },
-  } satisfies Position;
+  const futurePosition = buildNewPosition({ position, moveHistory }, move);
 
   if (!options.isCheckVerification) {
     const wouldWhiteBeInCheck = getIsWhiteInCheck({

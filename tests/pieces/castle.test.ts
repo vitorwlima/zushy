@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { initialPosition } from "../../game/position";
+import { emptyPosition, initialPosition } from "../../game/position";
 import { makeMove } from "../../game/state/make-move";
 
 describe("castle", () => {
@@ -132,5 +132,38 @@ describe("castle", () => {
     expect(() => makeMove(move8, { from: "e1", to: "c1" })).toThrowError(
       "invalid-castling"
     );
+  });
+
+  it("should not castle if the rook is missing", () => {
+    expect(() =>
+      makeMove(
+        {
+          position: {
+            ...emptyPosition,
+            e1: { color: "white", piece: "king" },
+            e8: { color: "black", piece: "king" },
+          },
+          moveHistory: [],
+        },
+        { from: "e1", to: "g1" }
+      )
+    ).toThrowError("invalid-castling");
+  });
+
+  it("should not castle if the rook square is occupied by a non-rook piece", () => {
+    expect(() =>
+      makeMove(
+        {
+          position: {
+            ...emptyPosition,
+            e1: { color: "white", piece: "king" },
+            e8: { color: "black", piece: "king" },
+            h1: { color: "white", piece: "bishop" },
+          },
+          moveHistory: [],
+        },
+        { from: "e1", to: "g1" }
+      )
+    ).toThrowError("invalid-castling");
   });
 });

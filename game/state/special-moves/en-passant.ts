@@ -27,6 +27,9 @@ export const getIsEnPassant = (gameState: GameState, move: Move) => {
   const latestMove = gameState.moveHistory[gameState.moveHistory.length - 1];
   if (!latestMove) return false;
 
+  const latestMovePiece = gameState.position[latestMove.to];
+  if (latestMovePiece?.piece !== "pawn") return false;
+
   const hasMovedPawnJustOnce =
     gameState.moveHistory.filter((move) => move.from === latestMove.from)
       .length === 1;
