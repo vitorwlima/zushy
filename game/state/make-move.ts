@@ -24,6 +24,10 @@ export const makeMove = (
     newPosition[castleMove.rookTo] = { ...position[castleMove.rookFrom]! };
   }
 
+  if (move.promotion) {
+    newPosition[move.to] = { ...newPosition[move.to]!, piece: move.promotion };
+  }
+
   const newMoveHistory = [
     ...moveHistory,
     {

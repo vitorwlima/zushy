@@ -162,4 +162,95 @@ describe("pawn", () => {
       expect(newPosition.c4).toEqual({ color: "black", piece: "pawn" });
     });
   });
+
+  describe("promotion", () => {
+    it("should throw error if promotion is not provided", () => {
+      expect(() =>
+        makeMove(
+          {
+            position: {
+              ...emptyPosition,
+              e1: { color: "white", piece: "king" },
+              e8: { color: "black", piece: "king" },
+              a7: { color: "white", piece: "pawn" },
+            },
+            moveHistory: [],
+          },
+          { from: "a7", to: "a8" }
+        )
+      ).toThrowError("invalid-promotion");
+    });
+
+    it("should promote successfully to a queen", () => {
+      const { position: newPosition } = makeMove(
+        {
+          position: {
+            ...emptyPosition,
+            e1: { color: "white", piece: "king" },
+            e8: { color: "black", piece: "king" },
+            a7: { color: "white", piece: "pawn" },
+          },
+          moveHistory: [],
+        },
+        { from: "a7", to: "a8", promotion: "queen" }
+      );
+
+      expect(newPosition.a8).toEqual({ color: "white", piece: "queen" });
+      expect(newPosition.a7).toBeNull();
+    });
+
+    it("should promote successfully to a rook", () => {
+      const { position: newPosition } = makeMove(
+        {
+          position: {
+            ...emptyPosition,
+            e1: { color: "white", piece: "king" },
+            e8: { color: "black", piece: "king" },
+            a7: { color: "white", piece: "pawn" },
+          },
+          moveHistory: [],
+        },
+        { from: "a7", to: "a8", promotion: "rook" }
+      );
+
+      expect(newPosition.a8).toEqual({ color: "white", piece: "rook" });
+      expect(newPosition.a7).toBeNull();
+    });
+
+    it("should promote successfully to a bishop", () => {
+      const { position: newPosition } = makeMove(
+        {
+          position: {
+            ...emptyPosition,
+            e1: { color: "white", piece: "king" },
+            e8: { color: "black", piece: "king" },
+            a7: { color: "white", piece: "pawn" },
+          },
+          moveHistory: [],
+        },
+        { from: "a7", to: "a8", promotion: "bishop" }
+      );
+
+      expect(newPosition.a8).toEqual({ color: "white", piece: "bishop" });
+      expect(newPosition.a7).toBeNull();
+    });
+
+    it("should promote successfully to a knight", () => {
+      const { position: newPosition } = makeMove(
+        {
+          position: {
+            ...emptyPosition,
+            e1: { color: "white", piece: "king" },
+            e8: { color: "black", piece: "king" },
+            a7: { color: "white", piece: "pawn" },
+          },
+          moveHistory: [],
+        },
+        { from: "a7", to: "a8", promotion: "knight" }
+      );
+
+      expect(newPosition.a8).toEqual({ color: "white", piece: "knight" });
+      expect(newPosition.a7).toBeNull();
+    });
+  });
 });

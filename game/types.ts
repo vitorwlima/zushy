@@ -77,6 +77,7 @@ export type SquareKey = keyof Position;
 export type Move = {
   from: SquareKey;
   to: SquareKey;
+  promotion?: "queen" | "rook" | "bishop" | "knight";
 };
 
 export type RecordedMove = Move & {

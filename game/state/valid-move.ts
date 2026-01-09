@@ -18,7 +18,8 @@ type ValidMoveResult =
   | "capturing-self"
   | "not-color-turn"
   | "in-check"
-  | "invalid-castling";
+  | "invalid-castling"
+  | "invalid-promotion";
 
 type ValidMoveOptions = {
   isCheckVerification?: boolean;
@@ -178,6 +179,13 @@ export const isValidMove = (
     (square) => position[square]
   );
   if (hasOtherPiecesBetween) return "piece-in-the-way";
+
+  const isPromoting =
+    fromSquare.piece === "pawn" &&
+    ((fromSquare.color === "white" && move.to.endsWith("8")) ||
+      (fromSquare.color === "black" && move.to.endsWith("1")));
+  if (isPromoting && !move.promotion) return "invalid-promotion";
+  if (move.promotion && fromSquare.piece !== "pawn") return "invalid-promotion";
 
   return "success";
 };
