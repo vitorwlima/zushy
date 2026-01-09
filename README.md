@@ -29,5 +29,6 @@ This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) 
   - [x] Black long-side
 - [x] Implement en passant
 - [x] Implement promotion
-- [ ] Implement stalemate
+- [x] Implement stalemate
 - [ ] Implement threefold repetition
+- [ ] Implement fifty-move rule

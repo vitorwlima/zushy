@@ -23,12 +23,12 @@ const Home = () => {
     if (highlightedSquares.length === 1 && highlightedSquares[0] !== code) {
       try {
         if (
-          (isValidMove(gameState, {
-            from: highlightedSquares[0],
-            to: code,
-            promotion: "queen",
-          }) === "success" &&
-            gameState.position[highlightedSquares[0]]?.piece === "pawn" &&
+          (gameState.position[highlightedSquares[0]]?.piece === "pawn" &&
+            isValidMove(gameState, {
+              from: highlightedSquares[0],
+              to: code,
+              promotion: "queen",
+            }) === "success" &&
             code.endsWith("8")) ||
           code.endsWith("1")
         ) {

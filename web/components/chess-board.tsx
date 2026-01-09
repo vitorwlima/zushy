@@ -4,7 +4,7 @@ import { Piece } from "game/pieces";
 import { getIsWhiteTurn } from "game/state/get-is-white-turn";
 import type { GameState, SquareKey } from "game/types";
 import Image from "next/image";
-import { getIsCheckmate } from "game/state/checkmate";
+import { GameStatusResult, getGameStatus } from "game/state/game-status";
 
 const pieceAbreviation: Record<Piece["name"], string> = {
   pawn: "p",
@@ -13,6 +13,14 @@ const pieceAbreviation: Record<Piece["name"], string> = {
   rook: "r",
   queen: "q",
   king: "k",
+};
+
+const gameStatusMessages: Record<GameStatusResult, string> = {
+  "white-to-play": "White to play",
+  "black-to-play": "Black to play",
+  "white-wins-by-checkmate": "White wins by checkmate",
+  "black-wins-by-checkmate": "Black wins by checkmate",
+  stalemate: "Draw by stalemate",
 };
 
 export const ChessBoard = ({
@@ -29,7 +37,8 @@ export const ChessBoard = ({
   onPromotion: (promotion: "queen" | "rook" | "bishop" | "knight") => void;
 }) => {
   const isWhiteTurn = getIsWhiteTurn(gameState);
-  const checkmateResult = getIsCheckmate(gameState);
+  const gameStatus = getGameStatus(gameState);
+  const isGameOver = !["white-to-play", "black-to-play"].includes(gameStatus);
 
   return (
     <div className="grid relative grid-cols-8 grid-rows-8 place-items-center select-none">
@@ -40,7 +49,7 @@ export const ChessBoard = ({
           (piece === null ||
             (piece?.color === "white" && !isWhiteTurn) ||
             (piece?.color === "black" && isWhiteTurn));
-        const isDisabled = isDisabledByTurn || checkmateResult !== null;
+        const isDisabled = isDisabledByTurn || isGameOver;
         const isPromoting = isPromotingOnSquare === code;
         const promotionColor = gameState.position[highlightedSquares[0]]?.color;
 
@@ -104,9 +113,9 @@ export const ChessBoard = ({
           </div>
         );
       })}
-      {checkmateResult !== null && (
-        <p className="text-gray-800 font-semibold absolute -bottom-8 capitalize">
-          {checkmateResult} wins by checkmate.
+      {isGameOver && (
+        <p className="text-gray-100 font-semibold absolute -bottom-8 capitalize">
+          {gameStatusMessages[gameStatus]}
         </p>
       )}
     </div>

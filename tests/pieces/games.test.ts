@@ -1,7 +1,8 @@
 import { describe, expect, it } from "bun:test";
 import { initialPosition } from "../../game/position";
 import { makeMove } from "../../game/state/make-move";
-import { getIsCheckmate } from "../../game/state/checkmate";
+import { getIsBlackInCheck } from "../../game/state/check";
+import { getGameStatus } from "../../game/state/game-status";
 
 describe("games", () => {
   it("should play game 1", () => {
@@ -38,8 +39,8 @@ describe("games", () => {
     expect(move7.position.f7).toEqual({ color: "white", piece: "queen" });
     expect(move7.position.h5).toBeNull();
 
-    const checkmateResult = getIsCheckmate(move7);
-    expect(checkmateResult).toEqual("white");
+    const gameStatus = getGameStatus(move7);
+    expect(gameStatus).toEqual("white-wins-by-checkmate");
   });
 
   it("should play game 2", () => {
@@ -58,7 +59,26 @@ describe("games", () => {
     const move8 = makeMove(move7, { from: "c8", to: "e6" });
     const move9 = makeMove(move8, { from: "e2", to: "e6" });
 
-    const checkmateResult = getIsCheckmate(move9);
-    expect(checkmateResult).toBeNull();
+    const gameStatus = getGameStatus(move9);
+    expect(gameStatus).toEqual("black-to-play");
+  });
+
+  it("should play game 3", () => {
+    const gameState = {
+      position: initialPosition,
+      moveHistory: [],
+    };
+
+    const move1 = makeMove(gameState, { from: "e2", to: "e3" });
+    const move2 = makeMove(move1, { from: "e7", to: "e5" });
+    const move3 = makeMove(move2, { from: "d1", to: "h5" });
+    const move4 = makeMove(move3, { from: "h7", to: "h6" });
+    const move5 = makeMove(move4, { from: "h5", to: "f7" });
+
+    expect(getIsBlackInCheck(move5)).toBe(true);
+
+    const move6 = makeMove(move5, { from: "e8", to: "f7" });
+    expect(move6.position.f7).toEqual({ color: "black", piece: "king" });
+    expect(move6.position.e8).toBeNull();
   });
 });
