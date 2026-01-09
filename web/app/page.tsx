@@ -1,12 +1,26 @@
 "use client";
 
 import { initialPosition } from "game/position";
-import type { GameState, SquareKey } from "game/types";
+import type { GameState, RecordedMove, SquareKey } from "game/types";
 import { makeMove } from "game/state/make-move";
 import { ChessBoard } from "../components/chess-board";
 import { useState } from "react";
 import { getIsWhiteTurn } from "game/state/get-is-white-turn";
 import { isValidMove } from "game/state/valid-move";
+
+const getGroupedMoves = (moves: RecordedMove[]) => {
+  return moves.reduce((acc, move) => {
+    const shouldBeInExistingGroup =
+      acc.length > 0 && acc[acc.length - 1].length < 2;
+    if (shouldBeInExistingGroup) {
+      acc[acc.length - 1].push(move);
+    } else {
+      acc.push([move]);
+    }
+
+    return acc;
+  }, [] as RecordedMove[][]);
+};
 
 const Home = () => {
   const [gameState, setGameState] = useState<GameState>({
@@ -87,7 +101,7 @@ const Home = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-800">
+    <div className="flex items-center justify-center h-screen bg-gray-800 gap-12 p-12">
       <ChessBoard
         gameState={gameState}
         highlightedSquares={highlightedSquares}
@@ -95,6 +109,19 @@ const Home = () => {
         isPromotingOnSquare={isPromotingOnSquare}
         onPromotion={onPromotion}
       />
+
+      <div className="flex flex-col p-4 h-full border-l border-gray-500 w-20">
+        {getGroupedMoves(gameState.moveHistory).map((moveGroup, index) => (
+          <div key={index} className="flex items-center gap-2">
+            <span className="text-gray-100">{index + 1}.</span>
+            {moveGroup.map((move) => (
+              <div key={move.notation} className="text-gray-100">
+                {move.notation}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

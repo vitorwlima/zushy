@@ -1,5 +1,6 @@
 import type { GameState, Move, RecordedMove } from "../types";
 import { buildNewPosition } from "./build-new-position";
+import { getMoveNotation } from "./get-move-notation";
 import { isValidMove } from "./valid-move";
 
 export const makeMove = (
@@ -16,7 +17,7 @@ export const makeMove = (
     {
       from: move.from,
       to: move.to,
-      notation: "tbd - prob just call a getNotationFromGameState",
+      notation: getMoveNotation({ position, moveHistory }, move),
     },
   ] satisfies RecordedMove[];
 
