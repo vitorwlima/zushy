@@ -22,6 +22,7 @@ const gameStatusMessages: Record<GameStatusResult, string> = {
   "black-wins-by-checkmate": "Black wins by checkmate",
   stalemate: "Draw by stalemate",
   "threefold-repetition": "Draw by threefold repetition",
+  "fifty-move-rule": "Draw by fifty-move rule",
 };
 
 export const ChessBoard = ({
