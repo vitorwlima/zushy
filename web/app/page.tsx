@@ -33,7 +33,7 @@ const Home = () => {
         <footer className="text-xs text-center">
           Check source code here:{" "}
           <Link
-            href="https://github.com/vitorwlima"
+            href="https://github.com/vitorwlima/zushy"
             className="hover:underline text-[#6C91AC]"
             target="_blank"
           >
