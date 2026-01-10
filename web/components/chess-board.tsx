@@ -6,6 +6,8 @@ import type { GameState, SquareKey } from "game/types";
 import Image from "next/image";
 import { GameStatusResult, getGameStatus } from "game/state/game-status";
 
+const PIECE_SET = "maestro";
+
 const pieceAbreviation: Record<Piece["name"], string> = {
   pawn: "p",
   knight: "n",
@@ -72,7 +74,7 @@ export const ChessBoard = ({
             {!!piece && (
               // california, cardinal, cburnett, fresca, gioco
               <Image
-                src={`/pieces/cardinal/${piece.color.slice(0, 1)}${
+                src={`/pieces/${PIECE_SET}/${piece.color.slice(0, 1)}${
                   pieceAbreviation[piece.piece]
                 }.svg`}
                 alt={code}
@@ -99,9 +101,10 @@ export const ChessBoard = ({
                       }}
                     >
                       <Image
-                        src={`/pieces/cardinal/${promotionColor.slice(0, 1)}${
-                          pieceAbreviation[promotingPiece]
-                        }.svg`}
+                        src={`/pieces/${PIECE_SET}/${promotionColor.slice(
+                          0,
+                          1
+                        )}${pieceAbreviation[promotingPiece]}.svg`}
                         alt={code}
                         height={80}
                         width={80}
