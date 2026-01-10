@@ -7,6 +7,7 @@ import Image from "next/image";
 import { GameStatusResult, getGameStatus } from "game/state/game-status";
 import { RotateCcwSquareIcon } from "lucide-react";
 import { useState } from "react";
+import { Player } from "./player";
 
 const PIECE_SET = "maestro";
 
@@ -53,7 +54,12 @@ export const ChessBoard = ({
 
   return (
     <div className="relative">
-      <div className="grid min-w-[640px] overflow-hidden grid-cols-8 grid-rows-8 place-items-center select-none rounded-md">
+      {boardPerspective === "white" ? (
+        <Player color="black" className="mb-2" />
+      ) : (
+        <Player color="white" className="mb-2" />
+      )}
+      <div className="grid min-w-[640px] relative overflow-hidden grid-cols-8 grid-rows-8 place-items-center select-none rounded-md">
         {boardDisplay.map(({ code, color }) => {
           const piece = gameState.position[code];
           const isDisabledByTurn =
@@ -143,20 +149,23 @@ export const ChessBoard = ({
             </div>
           );
         })}
-        <RotateCcwSquareIcon
-          className="absolute -top-1 -right-7 hover:opacity-80 rounded-full cursor-pointer size-5"
-          onClick={() => {
-            setBoardPerspective(
-              boardPerspective === "white" ? "black" : "white"
-            );
-          }}
-        />
-        {isGameOver && (
-          <p className="text-neutral-100 font-semibold absolute -bottom-8 capitalize">
-            {gameStatusMessages[gameStatus]}
-          </p>
-        )}
       </div>
+      {boardPerspective === "white" ? (
+        <Player color="white" className="mt-2" />
+      ) : (
+        <Player color="black" className="mt-2" />
+      )}
+      <RotateCcwSquareIcon
+        className="absolute -top-1 -right-7 hover:opacity-80 rounded-full cursor-pointer size-5"
+        onClick={() => {
+          setBoardPerspective(boardPerspective === "white" ? "black" : "white");
+        }}
+      />
+      {isGameOver && (
+        <p className="text-neutral-100 font-semibold absolute -bottom-8 capitalize">
+          {gameStatusMessages[gameStatus]}
+        </p>
+      )}
     </div>
   );
 };
