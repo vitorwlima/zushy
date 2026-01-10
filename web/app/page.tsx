@@ -102,7 +102,7 @@ const Home = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-800 gap-12 p-12">
+    <div className="flex items-center justify-center h-screen bg-neutral-800 gap-12 p-12">
       <ChessBoard
         gameState={gameState}
         highlightedSquares={highlightedSquares}
@@ -111,15 +111,15 @@ const Home = () => {
         onPromotion={onPromotion}
       />
 
-      <div className="flex flex-col p-4 h-full border-l border-gray-500 w-60">
+      <div className="flex flex-col p-4 h-full border-l border-neutral-500 w-60">
         {getGroupedMoves(gameState.moveHistory).map(
           (moveGroup, moveGroupIndex) => (
             <div key={moveGroupIndex} className="flex items-center gap-2">
-              <span className="text-gray-100">{moveGroupIndex + 1}.</span>
+              <span className="text-neutral-100">{moveGroupIndex + 1}.</span>
               {moveGroup.map((move, moveIndex) => (
                 <div
                   key={`${move.notation}-${moveIndex}-${moveGroupIndex}`}
-                  className="text-gray-100"
+                  className="text-neutral-100"
                 >
                   {move.notation}
                 </div>

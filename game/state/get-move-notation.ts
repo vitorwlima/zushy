@@ -81,7 +81,7 @@ export const getMoveNotation = (gameState: GameState, move: Move): string => {
     pieceNotation === "" && isCapturing ? move.from[0] : "";
   const statusSuffix = isMate ? "#" : isCheck ? "+" : "";
   const promotionSuffix = move.promotion
-    ? PIECES.find((p) => p.name === move.promotion)!.notation
+    ? `=${PIECES.find((p) => p.name === move.promotion)!.notation}`
     : "";
 
   const notation = `${pieceNotation}${pieceNotationSuffix}${differentiatingFactor}${
