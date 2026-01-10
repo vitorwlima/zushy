@@ -1,134 +1,47 @@
-"use client";
-
-import { initialPosition } from "game/position";
-import type { GameState, RecordedMove, SquareKey } from "game/types";
-import { makeMove } from "game/state/make-move";
-import { ChessBoard } from "../components/chess-board";
-import { useState } from "react";
-import { getIsWhiteTurn } from "game/state/get-is-white-turn";
-import { isValidMove } from "game/state/valid-move";
-
-const getGroupedMoves = (moves: RecordedMove[]) => {
-  return moves.reduce((acc, move) => {
-    const shouldBeInExistingGroup =
-      acc.length > 0 && acc[acc.length - 1].length < 2;
-    if (shouldBeInExistingGroup) {
-      acc[acc.length - 1].push(move);
-    } else {
-      acc.push([move]);
-    }
-
-    return acc;
-  }, [] as RecordedMove[][]);
-};
+import Image from "next/image";
+import Link from "next/link";
 
 const Home = () => {
-  const [gameState, setGameState] = useState<GameState>({
-    position: initialPosition,
-    moveHistory: [],
-    positionAfterMoveHistory: [],
-    threefoldRepetitionHistory: [],
-  });
-  const [highlightedSquares, setHighlightedSquares] = useState<SquareKey[]>([]);
-  const [isPromotingOnSquare, setIsPromotingOnSquare] =
-    useState<SquareKey | null>(null);
-
-  const onSquareClick = (code: SquareKey) => {
-    setIsPromotingOnSquare(null);
-
-    if (highlightedSquares.length === 1 && highlightedSquares[0] !== code) {
-      try {
-        if (
-          gameState.position[highlightedSquares[0]]?.piece === "pawn" &&
-          isValidMove(gameState, {
-            from: highlightedSquares[0],
-            to: code,
-            promotion: "queen",
-          }) === "success" &&
-          (code.endsWith("8") || code.endsWith("1"))
-        ) {
-          setIsPromotingOnSquare(code);
-          return;
-        }
-
-        const newGameState = makeMove(gameState, {
-          from: highlightedSquares[0],
-          to: code,
-        });
-
-        setGameState(newGameState);
-        setHighlightedSquares([]);
-      } catch {
-        const isWhiteTurn = getIsWhiteTurn(gameState);
-        const piece = gameState.position[code];
-        const isCorrectColor =
-          piece?.color === (isWhiteTurn ? "white" : "black");
-
-        if (isCorrectColor) {
-          setHighlightedSquares([code]);
-        } else {
-          setHighlightedSquares([]);
-        }
-      }
-
-      return;
-    }
-
-    if (highlightedSquares.length === 1 && highlightedSquares[0] === code) {
-      setHighlightedSquares([]);
-      return;
-    }
-
-    if (gameState.position[code] !== null) {
-      setHighlightedSquares([code]);
-    }
-  };
-
-  const onPromotion = (promotion: "queen" | "rook" | "bishop" | "knight") => {
-    if (!isPromotingOnSquare) return;
-
-    try {
-      const newGameState = makeMove(gameState, {
-        from: highlightedSquares[0],
-        to: isPromotingOnSquare,
-        promotion,
-      });
-
-      setGameState(newGameState);
-    } catch {}
-
-    setIsPromotingOnSquare(null);
-    setHighlightedSquares([]);
-  };
-
   return (
-    <div className="flex items-center justify-center h-screen bg-neutral-800 gap-12 p-12">
-      <ChessBoard
-        gameState={gameState}
-        highlightedSquares={highlightedSquares}
-        onSquareClick={onSquareClick}
-        isPromotingOnSquare={isPromotingOnSquare}
-        onPromotion={onPromotion}
-      />
+    <main className="h-screen p-4 md:p-12 md:pb-6 lg:pb-12 lg:p-24">
+      <div className="flex-col flex justify-between h-full max-w-52 mx-auto">
+        <div className="flex flex-col">
+          <div className="flex flex-col items-center gap-2">
+            <h1 className="text-2xl font-semibold flex items-end gap-2 leading-7">
+              <Image src="/zushy.png" alt="Zushy" width={40} height={40} />
+              Zushy
+            </h1>
+            <p className="text-xs">Goated chess app and bot.</p>
+          </div>
 
-      <div className="flex flex-col p-4 h-full border-l border-neutral-500 w-60">
-        {getGroupedMoves(gameState.moveHistory).map(
-          (moveGroup, moveGroupIndex) => (
-            <div key={moveGroupIndex} className="flex items-center gap-2">
-              <span className="text-neutral-100">{moveGroupIndex + 1}.</span>
-              {moveGroup.map((move, moveIndex) => (
-                <div
-                  key={`${move.notation}-${moveIndex}-${moveGroupIndex}`}
-                  className="text-neutral-100"
-                >
-                  {move.notation}
-                </div>
-              ))}
-            </div>
-          )
-        )}
+          <div className="flex flex-col gap-4 mt-12">
+            <Link
+              href="/analysis"
+              className="text-sm py-3 px-4 bg-[#6C91AC] rounded-md text-center font-semibold hover:bg-[#587082] transition-colors duration-150"
+            >
+              Analysis
+            </Link>
+            <Link
+              href="/play"
+              className="text-sm py-3 px-4 bg-[#6C91AC] text-center rounded-md font-semibold hover:bg-[#587082] transition-colors duration-150"
+            >
+              Play vs Zushy
+            </Link>
+          </div>
+        </div>
+
+        <footer className="text-xs text-center">
+          Check source code here:{" "}
+          <Link
+            href="https://github.com/vitorwlima"
+            className="hover:underline text-[#6C91AC]"
+            target="_blank"
+          >
+            GitHub
+          </Link>
+        </footer>
       </div>
-    </div>
+    </main>
   );
 };
 
