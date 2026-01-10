@@ -1,6 +1,7 @@
 import type { Piece } from ".";
 
 export const queen: Piece = {
+  value: 9,
   name: "queen",
   notation: "Q",
   vectorPerspective: "absolute",

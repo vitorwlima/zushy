@@ -28,4 +28,5 @@ export type Piece = {
   capturePattern: Pattern[] | "same as move pattern";
   canMoveThroughOtherPieces: boolean;
   vectorPerspective: VectorPerspective;
+  value: number;
 };

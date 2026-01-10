@@ -1,6 +1,7 @@
 import type { Piece } from ".";
 
 export const pawn: Piece = {
+  value: 1,
   name: "pawn",
   notation: "",
   vectorPerspective: "relativeToColor",

@@ -1,6 +1,7 @@
 import type { Piece } from ".";
 
 export const rook: Piece = {
+  value: 5,
   name: "rook",
   notation: "R",
   vectorPerspective: "absolute",
