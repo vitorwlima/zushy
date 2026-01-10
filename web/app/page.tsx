@@ -7,7 +7,7 @@ const Home = () => {
       <div className="flex-col flex justify-between h-full max-w-52 mx-auto">
         <div className="flex flex-col">
           <div className="flex flex-col items-center gap-2">
-            <h1 className="text-2xl font-semibold flex items-end gap-2 leading-7">
+            <h1 className="text-2xl font-semibold flex items-end gap-1 leading-7">
               <Image src="/zushy.png" alt="Zushy" width={40} height={40} />
               Zushy
             </h1>
