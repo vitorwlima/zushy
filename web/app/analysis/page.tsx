@@ -111,13 +111,16 @@ const Analysis = () => {
         onPromotion={onPromotion}
       />
 
-      <div className="flex flex-col p-4 h-full border-l border-neutral-500 w-60">
+      <div className="flex flex-col gap-1 py-4 px-8 overflow-y-auto rounded-md h-[640px] bg-neutral-900 w-full max-w-2xs">
         {getGroupedMoves(gameState.moveHistory).map(
           (moveGroup, moveGroupIndex) => (
-            <div key={moveGroupIndex} className="flex items-center gap-2">
-              <span>{moveGroupIndex + 1}.</span>
+            <div key={moveGroupIndex} className="grid grid-cols-5">
+              <span className="col-span-1">{moveGroupIndex + 1}.</span>
               {moveGroup.map((move, moveIndex) => (
-                <div key={`${move.notation}-${moveIndex}-${moveGroupIndex}`}>
+                <div
+                  className="col-span-2 font-medium"
+                  key={`${move.notation}-${moveIndex}-${moveGroupIndex}`}
+                >
                   {move.notation}
                 </div>
               ))}

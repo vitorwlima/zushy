@@ -14,7 +14,7 @@ export const getMoveNotation = (gameState: GameState, move: Move): string => {
   const piece = fromSquare.piece;
   const pieceNotation = PIECES.find((p) => p.name === piece)!.notation;
 
-  const castleMove = POSSIBLE_CASTLE_MOVES.find(
+  const castleMove = piece === "king" && POSSIBLE_CASTLE_MOVES.find(
     (castleMove) => castleMove.from === move.from && castleMove.to === move.to
   );
   if (castleMove) {
