@@ -1,10 +1,12 @@
-import { boardDisplay } from "@/lib/board-display";
+import { blackBoardDisplay, whiteBoardDisplay } from "@/lib/board-display";
 import { cn } from "@/lib/utilts";
 import { Piece } from "game/pieces";
 import { getIsWhiteTurn } from "game/state/get-is-white-turn";
-import type { GameState, SquareKey } from "game/types";
+import type { Color, GameState, SquareKey } from "game/types";
 import Image from "next/image";
 import { GameStatusResult, getGameStatus } from "game/state/game-status";
+import { RotateCcwSquareIcon } from "lucide-react";
+import { useState } from "react";
 
 const PIECE_SET = "maestro";
 
@@ -40,10 +42,14 @@ export const ChessBoard = ({
   isPromotingOnSquare: SquareKey | null;
   onPromotion: (promotion: "queen" | "rook" | "bishop" | "knight") => void;
 }) => {
+  const [boardPerspective, setBoardPerspective] = useState<Color>("white");
   const isWhiteTurn = getIsWhiteTurn(gameState);
   const gameStatus = getGameStatus(gameState);
   const isGameOver = !["white-to-play", "black-to-play"].includes(gameStatus);
   const lastMove = gameState.moveHistory[gameState.moveHistory.length - 1];
+
+  const boardDisplay =
+    boardPerspective === "white" ? whiteBoardDisplay : blackBoardDisplay;
 
   return (
     <div className="grid relative grid-cols-8 grid-rows-8 place-items-center select-none">
@@ -135,6 +141,12 @@ export const ChessBoard = ({
           </div>
         );
       })}
+      <RotateCcwSquareIcon
+        className="absolute -top-1 -right-7 hover:opacity-80 rounded-full cursor-pointer size-5"
+        onClick={() => {
+          setBoardPerspective(boardPerspective === "white" ? "black" : "white");
+        }}
+      />
       {isGameOver && (
         <p className="text-neutral-100 font-semibold absolute -bottom-8 capitalize">
           {gameStatusMessages[gameStatus]}
